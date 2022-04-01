@@ -1,0 +1,14 @@
+{
+  "name": "mambotools",
+  "version": "0.0.1",
+  "description": "Mambo Tools library",
+  "main": "server.js",
+  "scripts": {
+    "tools": "node server.js"
+  },
+  "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
