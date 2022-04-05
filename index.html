@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mambo Tools</title>
-    
-    
+
+
     <!-- Dependencies -->
     <script src="src/deps/Dom.js"></script>
 
@@ -14,6 +15,7 @@
     <script src="src/configs/mamboInitializer.js"></script>
 
     <!-- Components - Order Alphabetically -->
+    <script src="src/utilities/MamboUtils/MamboUtilities.js"></script>
     <script src="src/utilities/MamboAPI/MamboAPIManager.js"></script>
     <script src="src/utilities/MamboDate/MamboDateManager.js"></script>
     <script src="src/utilities/MamboEvent/MamboEventManager.js"></script>
@@ -23,31 +25,54 @@
     <script src="src/utilities/MamboObject/MamboObjectManager.js"></script>
     <script src="src/utilities/MamboString/MamboString.js"></script>
     <script src="src/utilities/MamboRouter/MamboRouterManager.js"></script>
-    <script src="src/utilities/MamboUtils/MamboUtilities.js"></script>
 </head>
+
 <body>
+    <h1>Testing</h1>
+    <p><i>MamboRouter: routes(), push(), back()</i></p>
     <button onclick="goTo('/contactos')">Ir a contactos</button>
-    <button onclick="tools.router.back()">< volver</button>
-    <script>
-        
-        mambo.develop = true
+    <button onclick="tools.router.back()">
+        < volver</button>
+            <hr>
+            <p><i>MamboAPI: get()</i></p>
+            <div id="country">Pais: </div>
+            <div id="weather">Clima: </div>
 
-        const Routes = [
-            {
-                name: 'Home',
-                path: '/'
-            },
-            {
-                name: 'Contactos',
-                path: '/contactos'
-            }
-        ]
+            <script>
+                mambo.develop = true
 
-        tools.router.routes(Routes)
+                // MamboRouter Test
+                const Routes = [
+                    {
+                        name: 'Home',
+                        path: '/'
+                    },
+                    {
+                        name: 'Contactos',
+                        path: '/contactos'
+                    }
+                ]
 
-        function goTo (path) {
-            tools.router.push({ path })
-        }
-    </script>
+                tools.router.routes(Routes)
+
+                function goTo(path) {
+                    tools.router.push({ path })
+                }
+
+                // MamboAPI Test 
+                let latitude, longitude;
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+
+                    tools.api.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=3e97854c3e0f07313cba740848d442d2`)
+                        .then(resp => JSON.parse(resp))
+                        .then(data => {
+                            document.getElementById("country").innerText = "Pais: " + data.sys.country
+                            document.getElementById("weather").innerText = "Clima: " + data.weather[0].description
+                        })
+                });
+            </script>
 </body>
+
 </html>

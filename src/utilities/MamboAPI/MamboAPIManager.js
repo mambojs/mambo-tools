@@ -63,7 +63,7 @@ window['tools']['api'] = new function MamboAPIManager(options) {
     }
 
     function execRequest(method, url, config) {
-        const xhrConfig = mambo.utils.extend(true, m_config, config);
+        const xhrConfig = tools.utils.extend(true, m_config, config);
 
         return new Promise(((resolve, reject) => {
             let xhr = new XMLHttpRequest();
