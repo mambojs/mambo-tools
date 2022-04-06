@@ -25,9 +25,9 @@ window['tools']['date'] = new class MamboDateManager {
         this.monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     }
 
-    getToday() {
+    getToday(atReallyStart = false) {
         let today = new Date();
-        today.setHours(0, 0, 0, 0);
+        if (atReallyStart) today.setHours(0, 0, 0, 0);
         return today;
     }
 
@@ -38,8 +38,8 @@ window['tools']['date'] = new class MamboDateManager {
 
         let tokens = formatText.match(this.m_formatTokens);
         let returnValue = "";
-
         tokens.forEach(token => {
+            console.log(returnValue);
             let text = "";
             switch (token) {
                 case "H":

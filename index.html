@@ -37,6 +37,24 @@
             <p><i>MamboAPI: get()</i></p>
             <div id="country">Pais: </div>
             <div id="weather">Clima: </div>
+            <hr>
+            <p><i>MamboDate: getToday(), format(), getHour()</i></p>
+            <div id="date">Fecha: </div>
+            <div id="hour">Hora: </div>
+            <hr>
+            <p><i>MamboEvent:</i></p>
+            <hr>
+            <p><i>MamboGraphics:</i></p>
+            <hr>
+            <p><i>MamboHistory:</i></p>
+            <hr>
+            <p><i>MamboIPFS:</i></p>
+            <hr>
+            <p><i>MamboObject:</i></p>
+            <hr>
+            <p><i>MamboString:</i></p>
+            <hr>
+            <p><i>MamboUtils:</i></p>
 
             <script>
                 mambo.develop = true
@@ -72,6 +90,31 @@
                             document.getElementById("weather").innerText = "Clima: " + data.weather[0].description
                         })
                 });
+
+                // MamboDate
+                document.getElementById("date").innerText = "Fecha: " + tools.date.format(tools.date.getToday(), "HH:mm, dddd, MMMM, YYYY");
+                document.getElementById("hour").innerText = "Hora: " + tools.date.getHours(new Date(), false);
+
+
+                // MamboEvent
+
+
+                // MamboGraphics
+
+
+                // MamboHistory
+
+
+                // MamboIPFS
+
+
+                // MamboObject
+
+
+                // MamboString
+
+
+                // MamboUtils
             </script>
 </body>
 
