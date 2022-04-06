@@ -39,7 +39,6 @@ window['tools']['date'] = new class MamboDateManager {
         let tokens = formatText.match(this.m_formatTokens);
         let returnValue = "";
         tokens.forEach(token => {
-            console.log(returnValue);
             let text = "";
             switch (token) {
                 case "H":

@@ -34,7 +34,7 @@ window['tools']['history'] = function MamboHistoryManager(path) {
     let self = this
 
     setupEventHandler();
-    checkHistory(); 
+    checkHistory();
 
     function pushState(state, title, path) {
         setPageTitle(title);
@@ -81,7 +81,7 @@ window['tools']['history'] = function MamboHistoryManager(path) {
 
     function checkHistory() {
         if (history.state === null) {
-            replaceState( path, "", path )
+            replaceState(path, "", path)
         } else {
             window.dispatchEvent(locationchange)
         }

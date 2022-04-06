@@ -35,6 +35,7 @@
         < volver</button>
             <hr>
             <p><i>MamboAPI: get()</i></p>
+            <button id="api-btn">Llamar WeatherAPI</button>
             <div id="country">Pais: </div>
             <div id="weather">Clima: </div>
             <hr>
@@ -43,10 +44,17 @@
             <div id="hour">Hora: </div>
             <hr>
             <p><i>MamboEvent:</i></p>
+            <p>Falta definir eventos</p>
             <hr>
-            <p><i>MamboGraphics:</i></p>
+            <p><i>MamboGraphics: getImage(), getSVG()</i></p>
+            <img id="image" width="100" height="100" />
+            <svg id="svg" width="100" height="100">
+                <path id="path" />
+            </svg>
             <hr>
             <p><i>MamboHistory:</i></p>
+            <button id="history-btn-1">Ir a contactos</button>
+            <button id="history-btn-2">Volver</button>
             <hr>
             <p><i>MamboIPFS:</i></p>
             <hr>
@@ -78,17 +86,18 @@
                 }
 
                 // MamboAPI Test 
-                let latitude, longitude;
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    latitude = position.coords.latitude;
-                    longitude = position.coords.longitude;
-
-                    tools.api.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=3e97854c3e0f07313cba740848d442d2`)
-                        .then(resp => JSON.parse(resp))
-                        .then(data => {
-                            document.getElementById("country").innerText = "Pais: " + data.sys.country
-                            document.getElementById("weather").innerText = "Clima: " + data.weather[0].description
-                        })
+                document.getElementById("api-btn").addEventListener("click", () => {
+                    let latitude, longitude;
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        latitude = position.coords.latitude;
+                        longitude = position.coords.longitude;
+                        tools.api.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=3e97854c3e0f07313cba740848d442d2`)
+                            .then(resp => JSON.parse(resp))
+                            .then(data => {
+                                document.getElementById("country").innerText = "Pais: " + data.sys.country
+                                document.getElementById("weather").innerText = "Clima: " + data.weather[0].description
+                            })
+                    });
                 });
 
                 // MamboDate
@@ -97,12 +106,20 @@
 
 
                 // MamboEvent
-
+                // There are no events created yet
+                // tools.event.addEventListener()
 
                 // MamboGraphics
+                document.getElementById("image").src = tools.graphics.getImage({ name: "arrow-down-box-black" });
+                const homeSVG = tools.graphics.getSVG({ name: "home" });
+                document.getElementById("svg").setAttribute("viewBox", homeSVG.attr.viewBox)
+                document.getElementById("path").setAttribute("d", homeSVG.paths[0]);
 
 
                 // MamboHistory
+                const newHistory = new tools.history("/");
+                document.getElementById("history-btn-1").addEventListener("click", () => newHistory.pushState("/contactos", "", "/contactos"));
+                document.getElementById("history-btn-2").addEventListener("click", () => newHistory.back());
 
 
                 // MamboIPFS
