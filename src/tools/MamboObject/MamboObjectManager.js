@@ -21,7 +21,7 @@ window['tools']['object'] = new function MamboObjectManager() {
     'use strict';
 
     // Object library
-    const store = {};
+    let store = {};
 
     this.get = (name) => store[name];
     this.save = saveObject;

@@ -3,12 +3,19 @@
   "version": "0.0.1",
   "description": "Mambo Tools library",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "tools": "node server.js"
+    "tools": "node server.js",
+    "build": "node esbuild.config.js",
+    "start": "node esbuild.config.js -w"
   },
   "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
   "license": "Apache 2.0",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.32",
+    "esbuild-serve": "^1.0.1"
   }
 }
