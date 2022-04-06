@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboIPFS.js
  *******************************************/
-function MamboIPFS() {
+window['tools']['ipfs'] = function MamboIPFS() {
 
     let ipfs;
     let readFile;

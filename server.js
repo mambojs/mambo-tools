@@ -28,11 +28,11 @@ const port = process.env.PORT || 8001;
 
 //setting middleware
 //Serves resources from public folder
-app.use(express.static(`${__dirname}/`));
+app.use(express.static(`${__dirname}/demo`));
 
 // Return Index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "index.html"));
+  res.sendFile(path.resolve(__dirname, "demo/index.html"));
 });
 
 // Start up Application
