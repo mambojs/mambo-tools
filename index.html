@@ -58,14 +58,23 @@
             <hr>
             <p><i>MamboIPFS:</i></p>
             <hr>
-            <p><i>MamboObject:</i></p>
+            <p><i>MamboObject: clearLibrary(), getLibrary(), save()</i></p>
+            <div id="object">Object: </div>
+            <button id="object-btn-1">Delete key</button>
+            <button id="object-btn-2">Add key</button>
             <hr>
-            <p><i>MamboString:</i></p>
+            <p><i>MamboString: findInArray()</i></p>
+            <div id="string-default">String:</div>
+            <input type="text" id="string-custom">
+            <button id="string-btn-1">Contains?</button>
+            <button id="string-btn-2">Is Equal?</button>
+            <div id="string-result">Result: </div>
             <hr>
             <p><i>MamboUtils:</i></p>
 
             <script>
                 mambo.develop = true
+
 
                 // MamboRouter Test
                 const Routes = [
@@ -85,6 +94,7 @@
                     tools.router.push({ path })
                 }
 
+
                 // MamboAPI Test 
                 document.getElementById("api-btn").addEventListener("click", () => {
                     let latitude, longitude;
@@ -100,6 +110,7 @@
                     });
                 });
 
+
                 // MamboDate
                 document.getElementById("date").innerText = "Fecha: " + tools.date.format(tools.date.getToday(), "HH:mm, dddd, MMMM, YYYY");
                 document.getElementById("hour").innerText = "Hora: " + tools.date.getHours(new Date(), false);
@@ -108,6 +119,7 @@
                 // MamboEvent
                 // There are no events created yet
                 // tools.event.addEventListener()
+
 
                 // MamboGraphics
                 document.getElementById("image").src = tools.graphics.getImage({ name: "arrow-down-box-black" });
@@ -123,15 +135,42 @@
 
 
                 // MamboIPFS
+                // Not implemented yet
 
 
                 // MamboObject
+                let lastKey = 0;
+                tools.object.clearLibrary();
+                document.getElementById("object-btn-1").addEventListener("click", () => {
+                    tools.object.remove(lastKey);
+                    document.getElementById("object").textContent = "Object: " + JSON.stringify(tools.object.getLibrary(), null, 4)
+                    lastKey--;
+                });
+                document.getElementById("object-btn-2").addEventListener("click", () => {
+                    lastKey++;
+                    tools.object.save((Math.random() * 100).toFixed(0), lastKey);
+                    document.getElementById("object").textContent = "Object: " + JSON.stringify(tools.object.getLibrary(), null, 4);
+                });
 
 
                 // MamboString
+                const defaultString = ["dog", "five", "table", "world"];
+                document.getElementById("string-default").textContent = "Strings: " + defaultString;
+                document.getElementById("string-btn-1").addEventListener("click", () => {
+                    const customString = document.getElementById("string-custom").value;
+                    const result = tools.string.findInArray(defaultString, customString, (item) => item, "contains");
+                    document.getElementById("string-result").textContent = result ? "Result: True" : "Result: False";
+                });
+                document.getElementById("string-btn-2").addEventListener("click", () => {
+                    const customString = document.getElementById("string-custom").value;
+                    const result = tools.string.findInArray(defaultString, customString, (item) => item, "equals");
+                    document.getElementById("string-result").textContent = result ? "Result: True" : "Result: False";
+                });
 
 
                 // MamboUtils
+
+
             </script>
 </body>
 

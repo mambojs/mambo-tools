@@ -27,7 +27,10 @@ window['tools']['object'] = new function MamboObjectManager() {
     this.save = saveObject;
     this.remove = (name) => delete store[name];
     this.getLibrary = () => store;
-    this.clearLibrary = () => store = {};
+    this.clearLibrary = () => {
+        for (let key in store) delete store[key]
+        return store;
+    };
 
     function saveObject(object, name) {
         const objName = name ? name : object.constructor.name;
