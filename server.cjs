@@ -23,6 +23,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const open = require('open');
 const fs = require('fs');
 const port = process.env.PORT || 8001;
 
@@ -38,3 +39,5 @@ app.get("*", (req, res) => {
 // Start up Application
 app.listen(port);
 console.log(`Listening on http://localhost:${port}`);
+
+open(`http://localhost:${port}`);

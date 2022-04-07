@@ -5,14 +5,14 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "tools": "node server.js",
     "build": "node esbuild.config.js",
-    "start": "node esbuild.config.js -w"
+    "start": "node server.cjs & node esbuild.config.js"
   },
   "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
   "license": "Apache 2.0",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "open": "^8.4.0"
   },
   "devDependencies": {
     "esbuild": "^0.14.32",
