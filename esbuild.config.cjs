@@ -15,7 +15,7 @@ const { createServer } = require("http");
 
 // const app = express();
 const sourceFolder = "src";
-const outputLibFolder = "dist";
+const outputLibFolder = "tools-lib";
 const outputDemoFolder = "demo";
 const nameFile = "mambo-tools";
 const version = "last-min";
