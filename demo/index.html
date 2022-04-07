@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mambo Tools</title>
-    <script src="js/mambo-tools-last.js"></script>
+    <title>Mambo Tools Demo</title>
+    <script src="js/mambo-tools-last-min.js"></script>
 </head>
 <body>
     <button onclick="goTo('/contactos')">Ir a contactos</button>
-    <button onclick="tools.router.back()">< volver</button>
+    <button onclick="tools.router.back()">&lt; volver</button>
     <script>
-        
+
         mambo.develop = true
 
         const Routes = [
@@ -31,5 +29,5 @@
             tools.router.push({ path })
         }
     </script>
-</body>
-</html>
+
+</body></html>

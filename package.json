@@ -5,8 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "build": "node esbuild.config.js",
-    "start": "node server.cjs & node esbuild.config.js"
+    "build": "node esbuild.config.cjs buildLib",
+    "dev": "node server.cjs & node esbuild.config.cjs dev",
+    "start": "node server.cjs"
   },
   "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
   "license": "Apache 2.0",
