@@ -6,7 +6,9 @@
 // import fs from "fs";
 // const port = process.env.PORT || 8001;
 // import esbuild from "esbuild";
+const { exec } = require("child_process");
 const esbuild = require("esbuild");
+
 // import { createServer } from "http";
 const { createServer } = require("http");
 
@@ -18,7 +20,7 @@ const sourceFolder = "src";
 const outputLibFolder = "tools-lib";
 const outputDemoFolder = "demo";
 const nameFile = "mambo-tools";
-const version = "last-min";
+const version = "last3-min";
 
 const clients = [];
 
@@ -28,7 +30,9 @@ function buildLib() {
 
   const options = {
     entryPoints: [`${sourceFolder}/index.js`],
-    outfile: `${outputDemoFolder}/js/${nameFile}-${version}.js`,
+    entryNames: `${nameFile}-${version}`,
+    outdir: `${outputLibFolder}`,
+    // outfile: `${outputLibFolder}/js/${nameFile}-${version}.js`,
     minify: true,
     bundle: true,
     sourcemap: true
@@ -69,6 +73,17 @@ function dev() {
       }
     }
   }).then(result => {
+    exec('gulp', (err, stdout, stderr) => {
+      if (err) {
+          console.log(`error: ${err.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      console.log(`stdout: ${stdout}`);
+    })
     console.log('Watching...')
   })
 
