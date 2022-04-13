@@ -23,21 +23,18 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const open = require('open');
-const fs = require('fs');
-const port = process.env.PORT || 8001;
+const config = require("./config.cjs");
 
 //setting middleware
+
 //Serves resources from public folder
-app.use(express.static(`${__dirname}/demo`));
+app.use(express.static(`${__dirname}/${config.OUTPUT_DIR}`));
 
 // Return Index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "demo/index.html"));
+  res.sendFile(path.resolve(__dirname, config.OUTPUT_HTML));
 });
 
 // Start up Application
-app.listen(port);
-console.log(`Listening on http://localhost:${port}`);
-
-open(`http://localhost:${port}`);
+app.listen(config.PORT);
+console.log(`Listening on http://localhost:${config.PORT}`);

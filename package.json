@@ -6,23 +6,23 @@
   "type": "module",
   "scripts": {
     "build": "node esbuild.config.cjs buildLib",
-    "dev": "node server.cjs & node esbuild.config.cjs dev",
+    "dev": "node server.cjs & node esbuild.config.cjs dev & gulp watchChanges",
     "start": "node server.cjs"
   },
   "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
   "license": "Apache 2.0",
   "dependencies": {
-    "express": "^4.17.1",
-    "open": "^8.4.0"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "esbuild": "^0.14.32",
-    "esbuild-serve": "^1.0.1",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
+    "gulp-htmlmin": "^5.0.1",
     "gulp-processhtml": "^1.2.0",
     "gulp-sourcemaps": "^3.0.0",
-    "gulp-terser": "^2.1.0"
+    "gulp-terser": "^2.1.0",
+    "nodemon": "^2.0.15"
   }
 }

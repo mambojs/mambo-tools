@@ -1,38 +1,20 @@
-// #!/usr/bin/env node
 
-// import express from 'express';
-// import path from "path";
-// import { fileURLToPath } from 'url';
-// import fs from "fs";
-// const port = process.env.PORT || 8001;
-// import esbuild from "esbuild";
+const fs = require('fs');
 const { exec } = require("child_process");
 const esbuild = require("esbuild");
-
-// import { createServer } from "http";
 const { createServer } = require("http");
+const config = require("./config.cjs")
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// const app = express();
-const sourceFolder = "src";
-const outputLibFolder = "tools-lib";
-const outputDemoFolder = "demo";
-const nameFile = "mambo-tools";
-const version = "last3-min";
-
-const clients = [];
+// const clients = [];
 
 function buildLib() {
 
   console.log("Building...");
 
   const options = {
-    entryPoints: [`${sourceFolder}/index.js`],
-    entryNames: `${nameFile}-${version}`,
-    outdir: `${outputLibFolder}`,
-    // outfile: `${outputLibFolder}/js/${nameFile}-${version}.js`,
+    entryPoints: [config.SRC_PATH],
+    entryNames: config.LIB_FILE_NAME,
+    outdir: config.LIB_DIR,
     minify: true,
     bundle: true,
     sourcemap: true
@@ -49,15 +31,14 @@ function dev() {
   console.log("Running Dev Mode");
 
   esbuild.build({
-    entryPoints: [`${sourceFolder}/index.js`],
-    outfile: `${outputDemoFolder}/js/${nameFile}-${version}.js`,
+    entryPoints: [config.SRC_PATH],
+    outfile: config.OUTPUT_JS,
     bundle: true,
-    // metafile: true,
     minify: true,
     sourcemap: true,
-    banner: {
-      js: ' (() => new EventSource("http://localhost:8008").onmessage = () => location.reload())();',
-    },
+    // banner: {
+    //   js: ' (() => new EventSource("http://localhost:8008").onmessage = () => location.reload())();',
+    // },
     watch: {
       onRebuild(error, result) {
         if (error) {
@@ -65,15 +46,35 @@ function dev() {
         }
         else 
         {
-          console.log('watch build succeeded:', result)
-          clients.forEach((res) => res.write("data: update\n\n"));
-          clients.length = 0;
+          console.log('esbuild: Rebuild success')
+          // clients.forEach((res) => res.write("data: update\n\n"));
+          // clients.length = 0;
           console.log(error ? error : "...");
         }
       }
     }
   }).then(result => {
-    exec('gulp', (err, stdout, stderr) => {
+    checkHTMLexists()
+    console.log('Watching...')
+  })
+
+  // createServer((req, res) => {
+  //   return clients.push(
+  //     res.writeHead(200, {
+  //       "Content-Type": "text/event-stream",
+  //       "Cache-Control": "no-cache",
+  //       "Access-Control-Allow-Origin": "*",
+  //       Connection: "keep-alive",
+  //     }),
+  //   );
+  // }).listen(8008);
+  
+}
+
+function checkHTMLexists() {
+  if (!fs.existsSync(config.OUTPUT_HTML)) {
+    console.log("Building HTML...");
+    exec('gulp html', (err, stdout, stderr) => {
       if (err) {
           console.log(`error: ${err.message}`);
           return;
@@ -84,20 +85,7 @@ function dev() {
       }
       console.log(`stdout: ${stdout}`);
     })
-    console.log('Watching...')
-  })
-
-  createServer((req, res) => {
-    return clients.push(
-      res.writeHead(200, {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "Access-Control-Allow-Origin": "*",
-        Connection: "keep-alive",
-      }),
-    );
-  }).listen(8008);
-  
+  }
 }
 
 for (var i=0; i<process.argv.length;i++) {
