@@ -2,10 +2,7 @@
 const fs = require('fs');
 const { exec } = require("child_process");
 const esbuild = require("esbuild");
-const { createServer } = require("http");
 const config = require("./config.cjs")
-
-// const clients = [];
 
 function buildLib() {
 
@@ -36,9 +33,6 @@ function dev() {
     bundle: true,
     minify: true,
     sourcemap: true,
-    // banner: {
-    //   js: ' (() => new EventSource("http://localhost:8008").onmessage = () => location.reload())();',
-    // },
     watch: {
       onRebuild(error, result) {
         if (error) {
@@ -46,28 +40,25 @@ function dev() {
         }
         else 
         {
-          console.log('esbuild: Rebuild success')
-          // clients.forEach((res) => res.write("data: update\n\n"));
-          // clients.length = 0;
-          console.log(error ? error : "...");
+          console.log('esbuild: index.js rebuilt');
         }
       }
     }
   }).then(result => {
+    exec('gulp demos', (err, stdout, stderr) => {
+      if (err) {
+          console.log(`error: ${err.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      console.log(`stdout: ${stdout}`);
+    })
     checkHTMLexists()
-    console.log('Watching...')
+    console.log('Watching lib...')
   })
-
-  // createServer((req, res) => {
-  //   return clients.push(
-  //     res.writeHead(200, {
-  //       "Content-Type": "text/event-stream",
-  //       "Cache-Control": "no-cache",
-  //       "Access-Control-Allow-Origin": "*",
-  //       Connection: "keep-alive",
-  //     }),
-  //   );
-  // }).listen(8008);
   
 }
 

@@ -1,0 +1,1 @@
+console.log('Soy una prueba de graphics');

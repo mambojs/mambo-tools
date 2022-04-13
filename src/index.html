@@ -5,33 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <!-- build:js js/mambo-tools-last3-min.js -->
-    <script src="index.js" type="module"></script>
+    <!-- build:js js/lib/mambo-tools-last-min.js -->
     <!--/build-->
 </head>
 <body>
-    <button onclick="goTo('/contactos')">Ir a contactos</button>
-    <button onclick="tools.router.back()">volver</button>
-    <script>
-        
-        mambo.develop = true
-
-        const Routes = [
-            {
-                name: 'Home',
-                path: '/'
-            },
-            {
-                name: 'Contactos',
-                path: '/contactos'
-            }
-        ]
-
-        tools.router.routes(Routes)
-
-        function goTo (path) {
-            tools.router.push({ path })
-        }
-    </script>
+    <!-- build:js js/demos/index.js -->
+    <!--/build-->
 </body>
 </html>
