@@ -6,33 +6,51 @@ import htmlmin from 'gulp-htmlmin';
 import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
+import writeheader from 'gulp-header';
 import fs from 'fs';
 import config from './config.cjs';
 import { createServer } from 'http';
 
 function demos() {
     const demosjs = []; 
-    const tools = fs.readdirSync(config.SRC_TOOLS);
-    tools.forEach(file => {
+    const components = [];
+    const toolsDir = fs.readdirSync(config.SRC_TOOLS);
+    let write_demo = '';
+
+    toolsDir.forEach(tool => {
+        let component_values = {}
+         
         // Check if file is a directory
-        if (fs.lstatSync(`${config.SRC_TOOLS}/${file}`).isDirectory()) {
-        fs.readdirSync(`${config.SRC_TOOLS}/${file}`).forEach(file2 => {
-            if(fs.lstatSync(`${config.SRC_TOOLS}/${file}/${file2}`).isDirectory()) {
-            fs.readdirSync(`${config.SRC_TOOLS}/${file}/${file2}`).forEach(file3 => {
-                if(file3.endsWith(".js")) {
-                demosjs.push(`${config.SRC_TOOLS}/${file}/${file2}/${file3}`)
+        if (fs.lstatSync(`${config.SRC_TOOLS}/${tool}`).isDirectory()) {
+            component_values.name = tool;
+            fs.readdirSync(`${config.SRC_TOOLS}/${tool}`).forEach(demo => {
+                if(fs.lstatSync(`${config.SRC_TOOLS}/${tool}/${demo}`).isDirectory()) {
+                    fs.readdirSync(`${config.SRC_TOOLS}/${tool}/${demo}`).forEach(js => {
+                        if(js.endsWith(".js")) {
+                            demosjs.push(`${config.SRC_TOOLS}/${tool}/${demo}/${js}`)
+                            component_values.alias = js.replace('.js', '');
+                        }
+                    })
+                } else {
+                    component_values.component = demo;
                 }
             })
-            }
-        })
         }
+        components.push(component_values);
+
     })
+
+    write_demo = `
+        window["demotools"] = {};
+        window["demotools"].components = ${JSON.stringify(components)};
+        `;
 
     demosjs.push('reload.js');
 
     return src(demosjs)
         .pipe(sourcemaps.init())
         .pipe(concat(`index.js`))
+        .pipe(writeheader(write_demo))
         .pipe(terser())
         .pipe(sourcemaps.write('./'))
         .pipe(dest('./demo/js/demos'))
