@@ -76,9 +76,11 @@ window['tools']['router'] = new class MamboRouterManager {
                     return;
                 }
 
-                routesList = args;
+                routesList = args.concat(routesList)
 
-                init();
+                //if (!historyManager) {
+                    init();
+                //}
 
                 return;
 

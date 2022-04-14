@@ -63,7 +63,7 @@ function dev() {
 }
 
 function checkHTMLexists() {
-  if (!fs.existsSync(config.OUTPUT_HTML)) {
+  //if (!fs.existsSync(config.OUTPUT_HTML)) {
     console.log("Building HTML...");
     exec('gulp html', (err, stdout, stderr) => {
       if (err) {
@@ -76,7 +76,7 @@ function checkHTMLexists() {
       }
       console.log(`stdout: ${stdout}`);
     })
-  }
+  //}
 }
 
 for (var i=0; i<process.argv.length;i++) {

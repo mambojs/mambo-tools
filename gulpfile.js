@@ -12,31 +12,53 @@ import config from './config.cjs';
 import { createServer } from 'http';
 
 function demos() {
-    const demosjs = []; 
+    //const demosjs = []; 
     const components = [];
     const toolsDir = fs.readdirSync(config.SRC_TOOLS);
     let write_demo = '';
 
     toolsDir.forEach(tool => {
+
         let component_values = {}
          
         // Check if file is a directory
-        if (fs.lstatSync(`${config.SRC_TOOLS}/${tool}`).isDirectory()) {
-            component_values.name = tool;
-            fs.readdirSync(`${config.SRC_TOOLS}/${tool}`).forEach(demo => {
-                if(fs.lstatSync(`${config.SRC_TOOLS}/${tool}/${demo}`).isDirectory()) {
-                    fs.readdirSync(`${config.SRC_TOOLS}/${tool}/${demo}`).forEach(js => {
-                        if(js.endsWith(".js")) {
-                            demosjs.push(`${config.SRC_TOOLS}/${tool}/${demo}/${js}`)
-                            component_values.alias = js.replace('.js', '');
+        let component = `${config.SRC_TOOLS}/${tool}`;
+
+        if (fs.lstatSync(component).isDirectory()) {
+
+            fs.readdirSync(component).forEach(demof => {
+
+                let demo = `${component}/${demof}`;
+
+                if (fs.lstatSync(demo).isDirectory()) {
+
+                    fs.readdirSync(demo).forEach(jsf => {
+
+                        let js = `${demo}/${jsf}`;
+
+                        if (js.endsWith(".js")) {
+
+                            let alias = jsf.replace('.js', '');
+                            //demosjs.push(js)
+                            component_values.alias = alias;
+                            component_values.name = tool;
+                            component_values.script = getScript(js);
+                            component_values.custom = `demo-${alias}`;
                         }
+
                     })
+
                 } else {
-                    component_values.component = demo;
+                    component_values.component = demof;
                 }
+
             })
+
         }
-        components.push(component_values);
+
+        if (component_values.alias) {
+            components.push(component_values);
+        }
 
     })
 
@@ -45,16 +67,18 @@ function demos() {
         window["demotools"].components = ${JSON.stringify(components)};
         `;
 
-    demosjs.push('reload.js');
-
-    return src(demosjs)
+    //demosjs.push('reload.js');
+    
+    return src('demos_base.js')
         .pipe(sourcemaps.init())
         .pipe(concat(`index.js`))
         .pipe(writeheader(write_demo))
+        .pipe(writeheader(getScript('reload.js')))
         .pipe(terser())
         .pipe(sourcemaps.write('./'))
         .pipe(dest('./demo/js/demos'))
 }
+
 
 function html() {
     return src(`src/index.html`)
@@ -90,6 +114,10 @@ function watchChanges() {
         }),
         );
     }).listen(config.PORT_RELOAD);
+}
+
+function getScript(file) {
+    return fs.readFileSync(file, 'utf8');
 }
 
 export { demos, html, watchChanges };

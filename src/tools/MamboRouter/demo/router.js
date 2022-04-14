@@ -1,30 +1,35 @@
+// Js Code
+mambo.develop = true
+
+const customRoutes = {
+    'Home': { name: 'Home', path: '/' },
+    'HomeDemo': { name: 'Demo Home', path: '/demo/mamborouter' },
+    'Contactos': { name: 'Contactos', path: '/demo/mamborouter/contactos' }
+}
+
+const Routes = [
+    customRoutes.Home,
+    customRoutes.HomeDemo,
+    customRoutes.Contactos
+]
+
+tools.router.routes(Routes)
+    
+// Container
+const container = document.getElementById('demo-router')
+
 // Dom Elements
 const gotoBtn = document.createElement('button')
 const backBtn = document.createElement('button')
 
 gotoBtn.innerText = 'Ir a contactos'
-gotoBtn.onclick = () => goTo('/contactos')
-document.body.prepend(gotoBtn)
+gotoBtn.onclick = () => goTo(customRoutes.Contactos.path)
+container.prepend(gotoBtn)
 
-backBtn.innerText = 'Volver'
+backBtn.innerText = 'Demo Home'
 backBtn.onclick = () => tools.router.back()
-document.body.prepend(backBtn)
-
-// Js Code
-mambo.develop = true
-
-const Routes = [
-    {
-        name: 'Home',
-        path: '/'
-    },
-    {
-        name: 'Contactos',
-        path: '/contactos'
-    }
-]
-
-tools.router.routes(Routes)
+container.prepend(backBtn)
+    
 
 function goTo (path) {
     tools.router.push({ path })
