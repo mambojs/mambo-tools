@@ -18,7 +18,7 @@
  *  File : MamboRouterManager.js
  *******************************************/
 
-window['tools']['router'] = new class MamboRouterManager {
+window.tools.router = new class MamboRouterManager {
 
     constructor (){
 

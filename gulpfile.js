@@ -63,8 +63,8 @@ function demos() {
     })
 
     write_demo = `
-        window["demotools"] = {};
-        window["demotools"].components = ${JSON.stringify(components)};
+        window.demotools = {};
+        window.demotools.components = ${JSON.stringify(components)};
         `;
 
     //demosjs.push('reload.js');

@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboAPIManager.js
  *******************************************/
-window['tools']['api'] = new function MamboAPIManager(options) {
+window.tools.api = new function MamboAPIManager(options) {
     'use strict';
 
     let m_config;
