@@ -1,47 +1,57 @@
-function showComponentsList (components) {
-    let sidebar = document.getElementById('sidebar');
-    let list = document.createElement('ul');
+mambo.develop = true
 
-    components.forEach(component => {
-        let item = document.createElement('li');
-        item.innerText = component.name;
-        item.onclick = () => runComponent(component);
-        // item.onclick = () => tools.router.push({ path: `/demo/${component.name.toLowerCase()}` });
-        list.appendChild(item);
-    })
+window.demotools.manager = {
+    route: {
+        name: 'HomeDemo',
+        path: '/demo',
+        // alias: '/'
+    },
+    showComponentsList: (components) => {
+        let sidebar = document.getElementById('sidebar');
+        let list = document.createElement('ul');
 
-    sidebar.appendChild(list);
+        components.forEach(component => {
+            let item = document.createElement('li');
+            item.innerText = component.name;
+            item.onclick = () => { 
+                tools.router.push({ path: `/demo/${component.name.toLowerCase()}` });
+            }
+            list.appendChild(item);
+        })
+
+        sidebar.appendChild(list);
+    },
+    runComponent: (component) => {
+        let area = document.getElementById('area');
+        let div = document.createElement('div');
+        div.id = component.custom;
+
+        demotools.manager.clearArea();
+        area.appendChild(div);
+        demotools.manager.applyScript(component.script, component.custom);
+    },
+    clearArea: () => {
+        let area = document.getElementById('area');
+        area.innerHTML = '';
+    },
+    applyScript: (script, custom) => {
+        eval(script);
+    },
+    addRoutes: (components) => {
+        let routes = components.map(component => {
+            return {
+                name: component.name,
+                path: `/demo/${component.name.toLowerCase()}`,
+                action: () => { demotools.manager.runComponent(component); }
+            }
+        })
+
+        routes.push(demotools.manager.route);
+    
+        tools.router.routes(routes);
+    }
 }
-showComponentsList(demotools.components);
 
-function runComponent (component) {
-    let area = document.getElementById('area');
-    let div = document.createElement('div');
-    div.id = component.custom;
+demotools.manager.showComponentsList(demotools.components);
 
-    clearArea();
-    area.appendChild(div);
-    applyScript(component.script, component.custom);
-}
-
-function applyScript (script, custom) {
-    eval(script);
-}
-
-function clearArea () {
-    let area = document.getElementById('area');
-    area.innerHTML = '';
-}
-
-function addRoutes (components) {
-    let routes = components.map(component => {
-        return {
-            name: component.name,
-            path: `/demo/${component.name.toLowerCase()}`,
-            // action: runComponent.bind(null, component)
-        }
-    })
-
-    tools.router.routes(routes);
-}
-addRoutes(demotools.components);
+demotools.manager.addRoutes(demotools.components);

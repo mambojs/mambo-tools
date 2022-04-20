@@ -26,9 +26,6 @@ window.tools.router = new function MamboRouterManager () {
         setRoute();
     });
 
-    let historyManager;
-    let routesList = [];
-
     let current = {
         name: "",
         path: "",
@@ -44,27 +41,22 @@ window.tools.router = new function MamboRouterManager () {
         query: ""
     };
 
+    let historyManager;
+    let routesList = []; 
+
+    this.add = addRoutes;
+    this.back = routerBack;
     this.current = current;
+    this.go = routerGo;
     this.hash = "";
+    this.next = routerForward;
     this.push = routerPush;
     this.replace = routerReplace;
-    this.go = routerGo;
-    this.back = routerBack;
-    this.next = routerForward;
     this.routes = getSetRoutes;
 
-    function getSetRoutes(args) {
+    function addRoutes(args) {
 
-        // Get
-
-        if (!args) {
-            return routesList;
-        }
-
-        // Set
-        // Check objects format, Check duplicated name or path, Add routes to list, Init router/history
-
-        if (Array.isArray(args) && args.length) {
+        if (args.constructor.name === 'Array' && args.length) {
 
             if (!checkRoutesFormat(args)) {
                 return;
@@ -73,25 +65,48 @@ window.tools.router = new function MamboRouterManager () {
             if (!checkRoutesDuplicated(args)) {
                 return;
             }
+            
+            args.forEach(route => {
 
-            routesList = args.concat(routesList)
+                if (route.constructor.name === 'Object') {
 
-            //if (!historyManager) {
-                init();
-            //}
+                    let routeExist = false;
 
-            return;
+                    routesList.forEach(r => {
+                        if (r.path === route.path || r.alias === route.path) {
+                            routeExist = true;
+                        }
+                    });
+                    
+                    if (!routeExist) {
+                        routesList.push(route);
+                    }
 
-        }
+                }
 
-        // Developer mode
+            });
 
-        if (mambo.develop) {
-            alert(`MamboRouter: .routes() expected an Array object`);
         }
 
     }
 
+    function checkRoutesDuplicated(args) {
+
+        const uniqueByName = [...new Map(args.map(item => [item['name'], item])).values()];
+        const uniqueByPath = [...new Map(args.map(item => [item['path'], item])).values()];
+
+        if (uniqueByName.length < args.length || uniqueByPath.length < args.length) {
+
+            if (mambo.develop) alert(`MamboRouter: .routes() no duplicate name or path parameter in route object`);
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+    
     function checkRoutesFormat(args) {
 
         const isValidFormat = args.every(obj =>
@@ -115,20 +130,47 @@ window.tools.router = new function MamboRouterManager () {
 
     }
 
-    function checkRoutesDuplicated(args) {
+    function getSetRoutes(args) {
 
-        const uniqueByName = [...new Map(args.map(item => [item['name'], item])).values()];
-        const uniqueByPath = [...new Map(args.map(item => [item['path'], item])).values()];
+        // Get
 
-        if (uniqueByName.length < args.length || uniqueByPath.length < args.length) {
+        if (!args) {
+            return routesList;
+        }
 
-            if (mambo.develop) alert(`MamboRouter: .routes() no duplicate name or path parameter in route object`);
+        // Set
+        // Check objects format, Check duplicated name or path, Add routes to list, Init router/history
+        
+        if (routesList.length > 0) {
+            addRoutes(args);
+            return;
+        }
 
-            return false;
+        if (Array.isArray(args) && args.length) {
+
+            if (!checkRoutesFormat(args)) {
+                return;
+            }
+
+            if (!checkRoutesDuplicated(args)) {
+                return;
+            }
+            
+            routesList = args.concat(routesList)
+
+            if (!historyManager) {
+                init();
+            }
+
+            return;
 
         }
 
-        return true;
+        // Developer mode
+
+        if (mambo.develop) {
+            alert(`MamboRouter: .routes() expected an Array object`);
+        }
 
     }
 
@@ -139,49 +181,20 @@ window.tools.router = new function MamboRouterManager () {
         if (matched) {
             historyManager = new tools.history(path);
         }
-
+        else 
+        {
+            if (mambo.develop) alert(`MamboRouter: No initial route matched`);
+        }
     }
 
-    function routerPush(routeObject) {
-
-        if (isValidRouteObject(routeObject, 'push')) {
-
-            const { matched, path } = matchedRouteBy(routeObject);
-
-            if (matched) {
-
-                updateCurrent(routeObject, true);
-
-                historyManager.pushState(path, "", path);
-
-            }
+    function isCurrentRoute(routeObject) {
+            
+        if (routeObject.path === self.current.path) {
+            return true;
         }
 
-    }
+        return false;
 
-    function routerReplace(args) {
-        historyManager.replaceState(args, "", args.path);
-    }
-
-    function routerGo(args) {
-
-        if (!Number.isInteger(args)) {
-            if (mambo.develop) {
-                alert(`MamboRouter: .go() expected a integer number`);
-            }
-            return;
-        }
-
-        historyManager.go(args);
-
-    }
-
-    function routerBack() {
-        historyManager.back();
-    }
-
-    function routerForward() {
-        historyManager.forward();
     }
 
     function isValidRouteObject(args, type) {
@@ -243,13 +256,13 @@ window.tools.router = new function MamboRouterManager () {
     }
 
     function matchedRouteBy(routeObject) {
-
+        
         const routeMatched = routesList.find(route =>
             route.path === routeObject.path
-            || route.path === routeObject.path + '/'
+            || route.path + '/' === routeObject.path
             || route.name === routeObject.name
         );
-
+        
         if (routeMatched) {
             return { matched: true, path: routeMatched.path };
         }
@@ -277,24 +290,50 @@ window.tools.router = new function MamboRouterManager () {
 
     }
 
-    function setRoute() {
+    function routerBack() {
+        historyManager.back();
+    }
 
-        const currentRouteObject = routesList.find(route => route.path === history.state || route.alias === history.state);
+    function routerForward() {
+        historyManager.forward();
+    }
 
-        updateCurrent(currentRouteObject);
+    function routerGo(args) {
 
-        runAction();
+        if (!Number.isInteger(args)) {
+            if (mambo.develop) {
+                alert(`MamboRouter: .go() expected a integer number`);
+            }
+            return;
+        }
+
+        historyManager.go(args);
 
     }
 
-    function updateCurrent(currentRouteObject, recicle) {
+    function routerPush(routeObject) {
 
-        if (recicle) {
-            self.current = current;
+        if (isValidRouteObject(routeObject, 'push')) {
+
+            if (isCurrentRoute(routeObject)) {
+                return;
+            }
+
+            const { matched, path } = matchedRouteBy(routeObject);
+
+            if (matched) {
+
+                updateCurrent(routeObject, true);
+                
+                historyManager.pushState(path, "", path);
+
+            }
         }
 
-        self.current = tools.utils.extend(true, self.current, currentRouteObject);
+    }
 
+    function routerReplace(args) {
+        historyManager.replaceState(args, "", args.path);
     }
 
     function runAction() {
@@ -312,6 +351,26 @@ window.tools.router = new function MamboRouterManager () {
             }
 
         }
+
+    }
+
+    function setRoute() {
+
+        const currentRouteObject = routesList.find(route => route.path === history.state || route.alias === history.state);
+
+        updateCurrent(currentRouteObject);
+
+        runAction();
+
+    }
+
+    function updateCurrent(currentRouteObject, recicle) {
+
+        if (recicle) {
+            self.current = current;
+        }
+
+        self.current = tools.utils.extend(true, self.current, currentRouteObject);
 
     }
 

@@ -1,15 +1,9 @@
 // Js Code
-mambo.develop = true
-
 const customRoutes = {
-    'Home': { name: 'Home', path: '/' },
-    'HomeDemo': { name: 'Demo Home', path: '/demo/mamborouter' },
     'Contactos': { name: 'Contactos', path: '/demo/mamborouter/contactos' }
 }
 
 const Routes = [
-    customRoutes.Home,
-    customRoutes.HomeDemo,
     customRoutes.Contactos
 ]
 
@@ -26,7 +20,7 @@ gotoBtn.innerText = 'Ir a contactos'
 gotoBtn.onclick = () => goTo(customRoutes.Contactos.path)
 container.prepend(gotoBtn)
 
-backBtn.innerText = 'Demo Home'
+backBtn.innerText = '< Volver'
 backBtn.onclick = () => tools.router.back()
 container.prepend(backBtn)
     

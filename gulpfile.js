@@ -7,6 +7,7 @@ import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
 import writeheader from 'gulp-header';
+import writefooter from 'gulp-footer';
 import fs from 'fs';
 import config from './config.cjs';
 import { createServer } from 'http';
