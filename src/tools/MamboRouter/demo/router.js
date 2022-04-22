@@ -1,4 +1,5 @@
-// Js Code
+//: Config and set Routes
+//@
 const customRoutes = {
     'Contactos': { name: 'Contactos', path: '/demo/mamborouter/contactos' }
 }
@@ -8,6 +9,7 @@ const Routes = [
 ]
 
 tools.router.routes(Routes)
+//! END
     
 // Container
 const container = document.getElementById('demo-router')
@@ -24,7 +26,9 @@ backBtn.innerText = '< Volver'
 backBtn.onclick = () => tools.router.back()
 container.prepend(backBtn)
     
-
+//: Use Routes
+//@
 function goTo (path) {
     tools.router.push({ path })
 }
+//! END

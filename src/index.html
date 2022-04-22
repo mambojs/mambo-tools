@@ -16,7 +16,7 @@
         #app {
             display: grid;
             height: 500px;
-            grid-template-columns: 30% auto;
+            grid-template-columns: 20% auto;
             column-gap: 10px;
         }
         #sidebar {
@@ -31,19 +31,21 @@
         }
         #main {
             padding: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 10px;
         }
+        pre {
+            background: black;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: .9em;
+        } 
     </style>
 </head>
 <body>
-    <div id="app">
-        <div id="sidebar">
-            Lista de componentes
-        </div>
-        <div id="main">
-            <h3>Demo</h3>
-            <div id="area"></div>
-        </div>
-    </div>
     <!-- build:js js/demos/index.js -->
     <!--/build-->
 </body>

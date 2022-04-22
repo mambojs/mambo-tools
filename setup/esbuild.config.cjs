@@ -45,7 +45,7 @@ function dev() {
       }
     }
   }).then(result => {
-    exec('gulp demos', (err, stdout, stderr) => {
+    exec('gulp -f ./setup/gulpfile.js demos', (err, stdout, stderr) => {
       if (err) {
           console.log(`error: ${err.message}`);
           return;
@@ -65,7 +65,7 @@ function dev() {
 function checkHTMLexists() {
   //if (!fs.existsSync(config.OUTPUT_HTML)) {
     console.log("Building HTML...");
-    exec('gulp html', (err, stdout, stderr) => {
+    exec('gulp -f ./setup/gulpfile.js html', (err, stdout, stderr) => {
       if (err) {
           console.log(`error: ${err.message}`);
           return;

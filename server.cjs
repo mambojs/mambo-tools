@@ -23,11 +23,16 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const config = require("./config.cjs");
+const config = require("./setup/config.cjs");
 
 //setting middleware
 
-//Serves resources from public folder
+// Redirect to demo page
+app.get("/", (req, res) => {
+  res.redirect(301, "/demo");
+});
+
+// Serves resources from public folder
 app.use(express.static(`${__dirname}/${config.OUTPUT_DIR}`));
 
 // Return Index.html

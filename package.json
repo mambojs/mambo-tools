@@ -2,11 +2,11 @@
   "name": "mambotools",
   "version": "0.0.1",
   "description": "Mambo Tools library",
-  "main": "setup/server.js",
+  "main": "server.cjs",
   "type": "module",
   "scripts": {
-    "build": "node esbuild.config.cjs buildLib",
-    "dev": "node server.cjs & node esbuild.config.cjs dev & gulp watchChanges",
+    "build": "node ./setup/esbuild.config.cjs buildLib",
+    "dev": "node server.cjs & node ./setup/esbuild.config.cjs dev & gulp -f ./setup/gulpfile.js watchChanges",
     "start": "node server.cjs"
   },
   "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
@@ -19,12 +19,10 @@
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-footer": "^2.1.0",
     "gulp-header": "^2.0.9",
     "gulp-htmlmin": "^5.0.1",
     "gulp-processhtml": "^1.2.0",
     "gulp-sourcemaps": "^3.0.0",
-    "gulp-terser": "^2.1.0",
-    "nodemon": "^2.0.15"
+    "gulp-terser": "^2.1.0"
   }
 }
