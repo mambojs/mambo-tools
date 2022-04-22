@@ -1,4 +1,4 @@
-window['dom'] = new function DomJS() {
+window.dom = new function DomJS() {
     "use strict";
 
     const self = this;
