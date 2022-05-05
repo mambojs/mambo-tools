@@ -14,7 +14,8 @@ const OUTPUT_CSS = `${OUTPUT_DIR}/css/${LIB_FILE_NAME}.css`;
 const OUTPUT_HTML = `${OUTPUT_DIR}/index.html`;
 
 const SRC_DIR = "src";
-const SRC_PATH = `${SRC_DIR}/index.js`;
+const SRC_PATH = `${SRC_DIR}/configs/mamboInitializer.js`;
+const SRC_PATH_DEPS = `${SRC_DIR}/configs/mamboInitializer-deps.js`;
 const SRC_TOOLS = `${SRC_DIR}/tools`;
 
 module.exports = {
@@ -36,5 +37,6 @@ module.exports = {
 
     SRC_DIR,
     SRC_PATH,
+    SRC_PATH_DEPS,
     SRC_TOOLS
 }

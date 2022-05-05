@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node ./setup/esbuild.config.cjs buildLib",
+    "build-deps": "node ./setup/esbuild.config.cjs buildLibDeps",
     "dev": "node server.cjs & node ./setup/esbuild.config.cjs dev & gulp -f ./setup/gulpfile.js watchChanges",
     "start": "node server.cjs"
   },

@@ -23,12 +23,31 @@ function buildLib() {
 
 }
 
+function buildLibDeps() {
+
+  console.log("Building...");
+
+  const options = {
+    entryPoints: [config.SRC_PATH_DEPS],
+    entryNames: `${config.LIB_FILE_NAME}-deps`,
+    outdir: config.LIB_DIR,
+    minify: true,
+    bundle: true,
+    sourcemap: true
+  };
+
+  esbuild.build(options).then(result => {
+    console.log("Build complete!");
+  });
+
+}
+
 function dev() {
 
   console.log("Running Dev Mode");
 
   esbuild.build({
-    entryPoints: [config.SRC_PATH],
+    entryPoints: [config.SRC_PATH_DEPS],
     outfile: config.OUTPUT_JS,
     bundle: true,
     minify: true,
@@ -84,6 +103,9 @@ for (var i=0; i<process.argv.length;i++) {
     case 'buildLib':
       buildLib();
       break;
+    case 'buildLibDeps':
+      buildLibDeps();
+      break;
     case 'dev':
       dev();
       break;
@@ -91,4 +113,5 @@ for (var i=0; i<process.argv.length;i++) {
 }
 
 module.exports.buildLib = buildLib;
+module.exports.buildLibDeps = buildLibDeps;
 module.exports.dev = dev;

@@ -1,3 +1,6 @@
+if (!window.dom) {
+  import("../deps/Dom.js");
+}
 if (!window.mambo) {
   window.mambo = {
     develop: false
