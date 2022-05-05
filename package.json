@@ -19,7 +19,6 @@
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-header": "^2.0.9",
     "gulp-htmlmin": "^5.0.1",
     "gulp-processhtml": "^1.2.0",
     "gulp-sourcemaps": "^3.0.0",

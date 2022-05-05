@@ -6,7 +6,6 @@ import htmlmin from 'gulp-htmlmin';
 import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
-import writeheader from 'gulp-header';
 import fs from 'fs';
 import config from './config.cjs';
 import { createServer } from 'http';
@@ -80,11 +79,12 @@ function demos() {
         window.demotools.components = ${JSON.stringify(components)};
         `;
     
-    return src('demos_base.js')
+    /* create file with gulp */
+    fs.writeFile('demos_compiler.js', write_demo, function() { console.log('demos_compiler.js File created'); });
+
+    return src(['demos_compiler.js','reload.js','demos_base.js'])
         .pipe(sourcemaps.init())
         .pipe(concat(`index.js`))
-        .pipe(writeheader(write_demo))
-        .pipe(writeheader(getScript('reload.js').fullcontent))
         .pipe(terser())
         .pipe(sourcemaps.write('./'))
         .pipe(dest(`../${config.OUTPUT_DIR}/js/demos`))
@@ -134,6 +134,12 @@ function demoDistribution(cb) {
 
 function getScript(file) {
     
+    const htmlEntities = (html) => {
+        return html.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+         });
+    }
+
     const object = {
         content: '',
         fullcontent: fs.readFileSync(file, 'utf8'),
@@ -148,7 +154,7 @@ function getScript(file) {
         if (null !== codeList) {
             object.code = codeList.map(code => {
                 return {
-                    comment: code.match(/(?<=\/\/\:)(.*)/gm)[0].trim(),
+                    comment: htmlEntities(code.match(/(?<=\/\/\:)(.*)/gm)[0].trim()),
                     script: code.match(/(?<=\/\/\@)([\s\S]*?)(?=\/\/\!)/gm)[0]
                 }
             });

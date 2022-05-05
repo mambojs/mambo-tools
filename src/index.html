@@ -11,13 +11,13 @@
     <style>
         * {
             box-sizing: border-box;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
         }
         #app {
             display: grid;
             height: 500px;
             grid-template-columns: 20% auto;
             column-gap: 10px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
         }
         #sidebar {
             background-color: #f5f5f5;
@@ -35,13 +35,14 @@
             grid-template-columns: 1fr 1fr;
             column-gap: 10px;
         }
-        pre {
+        #area-code pre {
             background: black;
             color: white;
             padding: 10px;
             border-radius: 5px;
             font-family: monospace;
             font-size: .9em;
+            white-space: pre-wrap;
         } 
     </style>
 </head>
