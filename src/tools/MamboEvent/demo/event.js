@@ -1,5 +1,5 @@
 // Container
-const container = document.getElementById('demo-event');
+const container = document.querySelector('demo-event');
 
 container.innerHTML = 'soy EVENT';
 

@@ -9,7 +9,7 @@ const LIB_FILE_JS = `${LIB_FILE_NAME}.js`;
 const LIB_PATH = `${LIB_DIR}/${LIB_FILE_JS}`;
 
 const OUTPUT_DIR = "demo";
-const OUTPUT_JS = `${OUTPUT_DIR}/js/lib/${LIB_FILE_JS}`;
+const OUTPUT_JS = `${OUTPUT_DIR}/lib/${LIB_FILE_JS}`;
 const OUTPUT_CSS = `${OUTPUT_DIR}/css/${LIB_FILE_NAME}.css`;
 const OUTPUT_HTML = `${OUTPUT_DIR}/index.html`;
 

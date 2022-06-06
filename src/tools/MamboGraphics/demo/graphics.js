@@ -1,4 +1,4 @@
 // Container
-const container = document.getElementById('demo-graphics');
+const container = document.querySelector('demo-graphics');
 
 container.innerHTML = 'soy GRAPHICS';

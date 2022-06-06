@@ -1,4 +1,4 @@
 // Container
-const container = document.getElementById('demo-string');
+const container = document.querySelector('demo-string');
 
 container.innerHTML = 'soy STRING';

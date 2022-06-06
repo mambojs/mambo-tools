@@ -7,8 +7,8 @@
   "scripts": {
     "build": "node ./setup/esbuild.config.cjs buildLib",
     "build-deps": "node ./setup/esbuild.config.cjs buildLibDeps",
-    "dev": "node server.cjs & node ./setup/esbuild.config.cjs dev & gulp -f ./setup/gulpfile.js watchChanges",
-    "start": "node server.cjs"
+    "dev": "node server.cjs runDev & node ./setup/esbuild.config.cjs dev & gulp -f ./setup/gulpfile.js watchChanges",
+    "start": "node server.cjs runStart"
   },
   "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
   "license": "Apache 2.0",
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.14.32",
+    "esbuild-css-modules-plugin": "^2.2.16",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
