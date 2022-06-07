@@ -1,4 +1,4 @@
 // Container
-const container = document.getElementById('demo-date');
+const container = document.querySelector('demo-date');
 
 container.innerHTML = 'soy DATE';

@@ -1,5 +1,5 @@
 // Container
-const container = document.getElementById('demo-api');
+const container = document.querySelector('demo-api');
 
 container.innerHTML = 'soy API';
 

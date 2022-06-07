@@ -12,7 +12,7 @@ tools.router.routes(Routes)
 //! END
     
 // Container
-const container = document.getElementById('demo-router')
+const container = document.querySelector('demo-router')
 
 // Dom Elements
 const gotoBtn = document.createElement('button')

@@ -17,29 +17,53 @@
  *  Created On : Sat Feb 26 2022
  *  File : server.js
  *******************************************/
-'use strict';
+ 'use strict';
 
-// Scope variables
-const express = require("express");
-const app = express();
-const path = require("path");
-const config = require("./setup/config.cjs");
-
-//setting middleware
-
-// Redirect to demo page
-app.get("/", (req, res) => {
-  res.redirect(301, "/demo");
-});
-
-// Serves resources from public folder
-app.use(express.static(`${__dirname}/${config.OUTPUT_DIR}`));
-
-// Return Index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, config.OUTPUT_HTML));
-});
-
-// Start up Application
-app.listen(config.PORT);
-console.log(`Listening on http://localhost:${config.PORT}`);
+ // Scope variables
+ const express = require("express");
+ const app = express();
+ const path = require("path");
+ const config = require("./setup/config.cjs");
+ 
+ //setting middleware
+ 
+ // Redirect to demo page
+ app.get("/", (req, res) => {
+   res.redirect(301, "/demo");
+ });
+ 
+ // Serves resources from public folder
+ app.use(express.static(`${__dirname}/${config.OUTPUT_DIR}`));
+ 
+ // Return Index.html
+ app.get("*", (req, res) => {
+   res.sendFile(path.resolve(__dirname, config.OUTPUT_HTML));
+ });
+ 
+ // Start up Application
+ function appListen(port) {
+   app.listen(port);
+   console.log(`Listening on http://localhost:${port}`);
+ }
+ 
+ for (var i=0; i<process.argv.length;i++) {
+   switch (process.argv[i]) {
+     case 'runStart':
+       runStart();
+       break;
+     case 'runDev':
+       runDev();
+       break;
+   }
+ }
+ 
+ function runStart() {
+   appListen(9001);
+ }
+ 
+ function runDev() {
+   appListen(config.PORT);
+ }
+ 
+ module.exports.runStart = runStart;
+ module.exports.runDev = runDev;

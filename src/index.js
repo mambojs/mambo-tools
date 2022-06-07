@@ -1,1 +1,0 @@
-import './configs/mamboInitializer.js';

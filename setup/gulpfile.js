@@ -2,11 +2,11 @@
 import pkg from 'gulp';
 const { series, src, dest, parallel, watch } = pkg;
 import processhtml from 'gulp-processhtml';
+import cleanCSS from 'gulp-clean-css';
 import htmlmin from 'gulp-htmlmin';
 import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
 import terser from 'gulp-terser';
-import writeheader from 'gulp-header';
 import fs from 'fs';
 import config from './config.cjs';
 import { createServer } from 'http';
@@ -75,19 +75,24 @@ function demos() {
 
     })
 
+    /* Add html to demoui from setup/demos/demos_html.html */
+    const html = getScript('./demos/demos_html.html').fullcontent;
+
     write_demo = `
         window.demotools = {};
+        window.demotools.html = ${JSON.stringify(html)};
         window.demotools.components = ${JSON.stringify(components)};
         `;
     
-    return src('demos_base.js')
+    /* create file with gulp */
+    fs.writeFile('./demos/demos_compiler.js', write_demo, function() { console.log('./demos/demos_compiler.js File created'); });
+
+    return src(['./demos/demos_compiler.js','reload.js','./demos/demos_base.js'])
         .pipe(sourcemaps.init())
-        .pipe(concat(`index.js`))
-        .pipe(writeheader(write_demo))
-        .pipe(writeheader(getScript('reload.js').fullcontent))
+        .pipe(concat(`demotools.js`))
         .pipe(terser())
         .pipe(sourcemaps.write('./'))
-        .pipe(dest(`../${config.OUTPUT_DIR}/js/demos`))
+        .pipe(dest(`../${config.OUTPUT_DIR}/demos`))
 }
 
 
@@ -98,10 +103,20 @@ function html() {
         .pipe(dest(`../${config.OUTPUT_DIR}`))
 }
 
+function cssBase() {
+    return src(['./demos/demos_styles.css'])
+        .pipe(cleanCSS())
+        .pipe(dest(`../${config.OUTPUT_DIR}/demos`))
+}
+
 const clients = [];
 
 function watchChanges() {
     
+    const base = watch(['./demos/**/*', '!./demos/demos_compiler.js'], parallel(cssBase, demos));
+    base.on('all', (path, stats) => {
+        console.log(`Gulp: ${path} - ${stats}`);
+    })
 
     const watcher = watch(`../src/**/*`, parallel(html, demos));
     watcher.on('all', (path, stats) => {
@@ -134,6 +149,12 @@ function demoDistribution(cb) {
 
 function getScript(file) {
     
+    const htmlEntities = (html) => {
+        return html.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+         });
+    }
+
     const object = {
         content: '',
         fullcontent: fs.readFileSync(file, 'utf8'),
@@ -148,7 +169,7 @@ function getScript(file) {
         if (null !== codeList) {
             object.code = codeList.map(code => {
                 return {
-                    comment: code.match(/(?<=\/\/\:)(.*)/gm)[0].trim(),
+                    comment: htmlEntities(code.match(/(?<=\/\/\:)(.*)/gm)[0].trim()),
                     script: code.match(/(?<=\/\/\@)([\s\S]*?)(?=\/\/\!)/gm)[0]
                 }
             });
@@ -159,4 +180,4 @@ function getScript(file) {
     return object;
 }
 
-export { demos, html, watchChanges };
+export { demos, html, cssBase, watchChanges };
