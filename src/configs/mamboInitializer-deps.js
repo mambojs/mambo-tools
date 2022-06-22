@@ -1,7 +1,13 @@
+if (!window.dom) {
+  import("../deps/domjs-last-min.js");
+}
 if (!window.mambo) {
   window.mambo = {
     develop: false
   };
+}
+if (!window.ui) {
+  import("../deps/mambo-ui-last-min.js");
 }
 if (!window.tools) {
   window.tools = {};
