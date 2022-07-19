@@ -6,35 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Mambo Tools documentation">
     <base href="/">
-    <style>
-        body {
-            --background-color: #120b1b;
-            --font-size: 14px;
-            background-color: var(--background-color);
-            margin: auto;
-            font-size: var(--font-size);
-        }
-        .web-content {
-            height: 100vh;
-            display: grid;
-            align-items: center;
-        }
-    </style>
     <title>Mambo Tools docs</title>
-    <!-- build:css lib/mambo-tools-last-min.css -->
-    <!--/build-->
-    <!-- build:css lib/mambo-ui-last-min.css -->
-    <!--/build-->
-    <!-- build:css themes/dark.css -->
-    <!--/build-->
-    <!-- build:css demos/demos_styles.css -->
-    <!--/build-->
-    <!-- build:js lib/mambo-tools-last-min.js -->
-    <!--/build-->
+
+    <link rel="stylesheet" href="https://www.scotti.tech/lib/mambo-ui-min-v06-30-22-1-00.css">
+    
+    <link rel="stylesheet" href="src/themes/dark.css">
+
+    <link rel="stylesheet" href="src/demos/demos.css">
+
+    <script src="https://www.scotti.tech/lib/domjs-min-v06-30-22-1-00.js"></script>
+    <script src="https://www.scotti.tech/lib/mambo-ui-min-v06-30-22-1-00.js"></script>
+    
+    <script>
+        const tools = {};
+    </script>
+
+    <script src="src/tools/MamboAPI/MamboAPIManager.js"></script>
+    <script src="src/tools/MamboDate/MamboDateManager.js"></script>
+    <script src="src/tools/MamboEvent/MamboEventManager.js"></script>
+    <script src="src/tools/MamboGraphics/MamboGraphics.js"></script>
+    <script src="src/tools/MamboHistory/MamboHistoryManager.js"></script>
+    <script src="src/tools/MamboObject/MamboObjectManager.js"></script>
+    <script src="src/tools/MamboRouter/MamboRouterManager.js"></script>
+    <script src="src/tools/MamboString/MamboString.js"></script>
+    <script src="src/tools/MamboUtils/MamboUtilities.js"></script>
+
+    <script src="src/demos/demos.js"></script>
 </head>
 <body>
     <div class="web-content"></div>
-    <!-- build:js demos/demotools.js -->
-    <!--/build-->
 </body>
 </html>

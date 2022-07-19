@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "bam.vscode-file-templates",
+        "formulahendry.auto-rename-tag",
+        "hookyqr.beautify",
+        "eamodio.gitlens",
+        "xabikos.javascriptsnippets",
+        "mrmlnc.vscode-json5",
+        "msjsdiag.debugger-for-chrome"
+    ]
+}
