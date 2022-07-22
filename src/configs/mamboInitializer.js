@@ -1,10 +1,4 @@
-if (!window.mambo) {
-  window.mambo = {
-    develop: false
-  };
-}
-if (!window.tools) {
-  window.tools = {};
+window.tools = {};
 //@
 	import("../tools/MamboAPI/MamboAPIManager.js");
 	import("../tools/MamboDate/MamboDateManager.js");
@@ -17,4 +11,3 @@ if (!window.tools) {
 	import("../tools/MamboString/MamboString.js");
 	import("../tools/MamboUtils/MamboUtilities.js");
 //!
-}

@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboHistoryManager.js
  *******************************************/
-window.tools.history = function MamboHistoryManager(path) {
+tools.history = function MamboHistoryManager(path) {
     "use strict";
 
     // Public methods
