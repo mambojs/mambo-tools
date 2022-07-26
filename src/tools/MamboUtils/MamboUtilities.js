@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboUtilities.js
  *******************************************/
-tools.utils = new function MamboUtilities() {
+tools.utils = function MamboUtilities() {
     "use strict";
 
     this.clone = clone;

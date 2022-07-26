@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboEventManager.js
  *******************************************/
-tools.event = new function MamboEventManager() {
+tools.event = function MamboEventManager() {
 
     const m_eventDirectory = new MamboEventDirectory();
     const m_events = m_eventDirectory.events;

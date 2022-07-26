@@ -18,7 +18,7 @@
  *  File : MamboRouterManager.js
  *******************************************/
 
-tools.router = new function MamboRouterManager () {
+tools.router = function MamboRouterManager () {
 
     const self = this;
 

@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboString.js
  *******************************************/
-tools.string = new function MamboString() {
+tools.string = function MamboString() {
     'use strict';
 
     const self = this;

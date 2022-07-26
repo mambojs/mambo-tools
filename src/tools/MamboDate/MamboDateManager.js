@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboDateManager.js
  *******************************************/
-tools.date = new function MamboDateManager() {
+tools.date = function MamboDateManager() {
     'use strict';
 
     const self = this;
