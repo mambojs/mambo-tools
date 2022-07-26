@@ -89,6 +89,8 @@ async function getScript(path) {
     return object;
 }
 
+const router = new tools.router; 
+
 window.addEventListener('compiler-ready', () => {
 
     demotools.manager = new function demoManager () {
@@ -126,7 +128,7 @@ window.addEventListener('compiler-ready', () => {
 
             routes.push(ROUTE);
         
-            tools.router.routes(routes);
+            router.routes(routes);
         }
 
         function applyCode (code, custom) {
@@ -245,7 +247,7 @@ window.addEventListener('compiler-ready', () => {
                 let item = document.createElement('li');
                 item.innerText = component.name;
                 item.onclick = () => { 
-                    tools.router.push({ path: `${OUTPUT_PATH}${component.name.toLowerCase()}` });
+                    router.push({ path: `${OUTPUT_PATH}${component.name.toLowerCase()}` });
                 }
                 list.appendChild(item);
             })

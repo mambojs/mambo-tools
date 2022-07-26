@@ -8,7 +8,7 @@ const Routes = [
     customRoutes.Contactos
 ]
 
-tools.router.routes(Routes)
+router.routes(Routes)
 //! END
     
 // Container
@@ -23,12 +23,12 @@ gotoBtn.onclick = () => goTo(customRoutes.Contactos.path)
 container.prepend(gotoBtn)
 
 backBtn.innerText = '< Volver'
-backBtn.onclick = () => tools.router.back()
+backBtn.onclick = () => router.back()
 container.prepend(backBtn)
     
 //: Use Routes
 //@
 function goTo (path) {
-    tools.router.push({ path })
+    router.push({ path })
 }
 //! END

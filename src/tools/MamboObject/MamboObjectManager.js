@@ -17,7 +17,7 @@
  *  Created On : Sat Feb 26 2022
  *  File : MamboObjectManager.js
  *******************************************/
-tools.object = new function MamboObjectManager() {
+tools.object = function MamboObjectManager() {
     'use strict';
 
     // Object library
