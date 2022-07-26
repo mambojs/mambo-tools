@@ -14,10 +14,11 @@
 *  limitations under the License.
 
 *  @author Alejandro Sebastian Scotti
-*  @version v07-25-22-16-18
+*  @version v07-26-22-15-57
 *******************************************/
 
-window.tools = {};
+function mamboTools() { 
+const tools = {};
 tools.api = new function MamboAPIManager(options) {
   "use strict";
   let m_config;
@@ -1149,3 +1150,6 @@ tools.utils = new function MamboUtilities() {
     return (number * 100).toFixed(decimals) + "%";
   }
 }();
+
+return tools;
+}
