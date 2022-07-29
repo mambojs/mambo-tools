@@ -1,5 +1,27 @@
 {
-    "html.format.wrapLineLength": 0,
-    "workbench.editor.wrapTabs": true,
-    "editor.wordWrap": "on"
+
+    "editor.wordWrapColumn": 160,
+	"[markdown]": {
+		"editor.wordWrapColumn": 160,
+		"editor.wordWrap": "on"
+	},
+	"editor.insertSpaces": true,
+	"editor.detectIndentation": true,
+	"[javascript]": {
+		"editor.tabSize": 4
+	},
+	"[css]": {
+		"editor.tabSize": 2
+	},
+	"[html]": {
+		"editor.tabSize": 2
+	},
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"editor.formatOnType": true,
+	"editor.wordWrap": "off",
+	"html.format.indentInnerHtml": true,
+	"html.format.wrapLineLength": 200,
+	"css.format.spaceAroundSelectorSeparator": true,
+	"css.lint.float": "error"
 }

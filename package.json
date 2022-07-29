@@ -1,20 +1,42 @@
 {
   "name": "mambotools",
   "version": "0.0.1",
+  "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
+  "license": "Apache 2.0",
   "description": "Mambo Tools library",
   "main": "server.cjs",
   "type": "module",
   "scripts": {
+	"validate": "npm-run-all --parallel eslint hlint clint",
+	"start": "node server.cjs",
+	"eslint": "npx eslint \"**/*.js\" --fix --ignore-pattern node_modules/",
+	"hlint": "npx htmlhint \"**/*.html\"",
+	"clint": "npx stylelint \"**/*.css\"",
+	"precommit": "npm run validate",
+	"prepush": "npm run validate",
     "build": "node ./setup/esbuild.config.cjs buildLib",
-    "dev": "node server.cjs",
-    "start": "node server.cjs"
+    "dev": "node server.cjs"
+
   },
-  "author": "Alejandro Scotti, Scotti Corp, Open Source Community",
-  "license": "Apache 2.0",
+
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+	"prettier": "^2.7.1",
+	"stylelint-config-prettier": "^9.0.3",
+	"stylelint-prettier": "^2.0.0"
   },
   "devDependencies": {
-    "esbuild": "^0.14.32"
+	"@babel/eslint-parser": "^7.5.4",
+    "esbuild": "^0.14.32",
+	"babel-eslint": "^10.1.0",
+	"cors": "^2.8.5",
+	"eslint": "^8.19.0",
+	"htmlhint": "^1.1.4",
+	"husky": "^8.0.1",
+	"npm-run-all": "^4.1.5",
+	"npx": "^10.2.2",
+	"stylelint": "^14.9.1",
+	"stylelint-config-standard": "^26.0.0",
+	"stylelint-order": "^5.0.0"
   }
 }
