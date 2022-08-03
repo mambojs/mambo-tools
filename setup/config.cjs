@@ -3,7 +3,7 @@ const PORT = process.env.PORT || PORT_DEV;
 
 const LIB_DIR = "build";
 const LIB_NAME = "mambo-tools";
-const LIB_VERSION = `v${dateFormat()}`;
+const LIB_VERSION = "latest" // `v${dateFormat()}`;
 const LIB_FILE_NAME = `${LIB_NAME}-${LIB_VERSION}`;
 const LIB_FILE_NAME_MIN = `${LIB_NAME}-min-${LIB_VERSION}`;
 
