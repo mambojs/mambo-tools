@@ -17,6 +17,9 @@ indent_size = 4
 [*.js]
 max_line_length = 140
 
+[*.cjs]
+max_line_length = 140
+
 [*.css]
 indent_style = space
 indent_size = 2
