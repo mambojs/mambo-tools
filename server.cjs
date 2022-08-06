@@ -1,42 +1,38 @@
-/******************************************
- *  Copyright 2022 Alejandro Sebastian Scotti, Scotti Corp.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
-
- *  Author : Alejandro Scotti
- *  Created On : Sat Feb 26 2022
- *  File : server.js
- *******************************************/
-
-'use strict';
-
 // Scope variables
 const express = require("express");
 const app = express();
 const path = require("path");
 const config = require("./setup/config.cjs");
- 
-const DIR = config.SRC_DIR;
-const PORT = config.PORT;
+const fs = require("fs");
+// path bars by platform
+const separator = process.platform === "win32" ? "\\" : "/";
 
-//setting middleware
- 
-app.use(`/${DIR}`, express.static(DIR));
- 
+// Setting Middleware
+
+// Serves resources from public folder
+config.PUBLIC_DIRS.forEach((dir) => {
+	app.use(`/${dir}`, express.static(dir));
+});
+
+// Return system configuration
+app.get("/getSystemConfig", (req, res) => {
+	res.send(config.system);
+});
+
+// Fetch a file
+app.get("/getFile", (req, res) => {
+	const myPath = path.join(`${__dirname}${separator}${req.query.path}`);
+	fs.readFile(myPath, "utf8", (err, file) => {
+		if (err) return res.send(err);
+		res.send(file);
+	});
+});
+
 // Return Index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, `${DIR}/index.html`));
+	res.sendFile(path.resolve(__dirname, config.OUTPUT_HTML));
 });
- 
-app.listen(PORT);
-console.log(`Listening on http://localhost:${PORT}`);
+
+// Start up Application
+app.listen(config.PORT);
+console.log(`Listening on http://localhost:${config.PORT}`);
