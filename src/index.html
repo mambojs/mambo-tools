@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mambo Tools documentation">
-    <base href="/">
-    <title>Mambo Tools docs</title>
-
-    <link rel="stylesheet" href="https://www.scotti.tech/lib/mambo-ui-latest.css">    
-    <link rel="stylesheet" href="src/themes/dark.css">
-    <link rel="stylesheet" href="src/demos/demos.css">
-
-    <script src="https://www.scotti.tech/lib/domjs-latest.js"></script>
-    <script src="https://www.scotti.tech/lib/mambo-ui-latest.js"></script>
-    
-    <script>
-        const tools = {};
-    </script>
-
-    <script src="src/tools/MamboAPI/MamboAPIManager.js"></script>
-    <script src="src/tools/MamboDate/MamboDateManager.js"></script>
-    <script src="src/tools/MamboEvent/MamboEventManager.js"></script>
-    <script src="src/tools/MamboGraphics/MamboGraphics.js"></script>
-    <script src="src/tools/MamboHistory/MamboHistoryManager.js"></script>
-    <script src="src/tools/MamboObject/MamboObjectManager.js"></script>
-    <script src="src/tools/MamboRouter/MamboRouterManager.js"></script>
-    <script src="src/tools/MamboString/MamboString.js"></script>
-    <script src="src/tools/MamboUtils/MamboUtilities.js"></script>
-
-    <script src="src/demos/demos.js"></script>
-</head>
-<body>
-    <div class="web-content"></div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mambo Tools" />
+    <base href="/" />
+    <title>Mambo Tools Storyboard</title>
+    <!-- Load all Styles -->
+    <link rel="stylesheet" href="https://www.scotti.tech/lib/mambo-ui-latest.css" />
+    <link rel="stylesheet" href="src/components/storyboard/storyboard.css" />
+    <link rel="stylesheet" href="src/themes/dark.css" />
+    <link rel="stylesheet" href="src/demos/demos.css" />
+  </head>
+  <body>
+    <tools-storyboard></tools-storyboard>
+  </body>
+  <!-- Load JavaScripts Dependencies -->
+  <script src="https://www.scotti.tech/lib/domjs-latest.js"></script>
+  <script src="https://www.scotti.tech/lib/mambo-ui-latest.js"></script>
+  <!-- Load Initializer JavaScript -->
+  <script src="src/js/init.js"></script>
+  <!-- Load Mambo Tools JavaScripts -->
+  <script src="src/tools/Utilities/Utilities.js"></script>
+  <script src="src/tools/String/String.js"></script>
+  <script src="src/tools/APIManager/APIManager.js"></script>
+  <script src="src/tools/DateManager/DateManager.js"></script>
+  <script src="src/tools/EventManager/EventManager.js"></script>
+  <script src="src/tools/HistoryManager/HistoryManager.js"></script>
+  <script src="src/tools/ObjectManager/ObjectManager.js"></script>
+  <script src="src/tools/RouterManager/RouterManager.js"></script>
+  <!-- Load Storyboard JavaScripts -->
+  <script src="src/components/storyboard/storyboard.js"></script>
+  <!-- Load App JavaScript -->
+  <script src="src/js/index.js"></script>
 </html>
