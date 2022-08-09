@@ -139,12 +139,14 @@ function installStoryboard() {
 					return `<h4>${code.comment}</h4><pre>${code.script}</pre>`;
 				});
 
+				dom.empty(custom);
 				dom.append(custom, printCodes.join(""));
 			}
 		}
 
 		function applyDescription(desc, custom) {
-			dom.append(custom, desc);
+			dom.empty(custom);
+			dom.append(custom);
 		}
 
 		function applyScript(script) {

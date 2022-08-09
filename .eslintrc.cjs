@@ -24,6 +24,7 @@ module.exports = {
 	},
 	globals: {
 		object: true,
+		dom: true,
 		tools: true,
 	},
 };
