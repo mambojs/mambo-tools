@@ -1,5 +1,6 @@
 // Scope variables
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const path = require("path");
 const config = require("./setup/config.cjs");
@@ -8,6 +9,9 @@ const fs = require("fs");
 const separator = process.platform === "win32" ? "\\" : "/";
 
 // Setting Middleware
+
+// This is CORS-enabled for all origins!
+app.use(cors());
 
 // Serves resources from public folder
 config.PUBLIC_DIRS.forEach((dir) => {
