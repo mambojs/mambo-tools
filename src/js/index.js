@@ -9,4 +9,4 @@ object.save(mamboUI(), "ui");
 object.save(domJS(), "dom");
 
 // Begin Storyboard development installation
-installStoryboard(mycomp);
+installStoryboard();
