@@ -1,6 +1,6 @@
 // Scope variables
 const express = require("express");
-//const cors = require("cors");
+const cors = require("cors");
 const app = express();
 const path = require("path");
 const config = require("./setup/config.cjs");
