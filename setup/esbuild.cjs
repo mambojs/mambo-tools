@@ -7,7 +7,7 @@ function buildLib() {
 
 	console.log("Building library...");
 
-	const headerFn = "\nfunction mamboTools() { \nconst tools = {};";
+	const headerFn = "\nfunction mamboTools() { \nconst tools = {class:{}};";
 	const footerFn = "\nreturn tools;\n}";
 
 	// Bundle Native
