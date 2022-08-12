@@ -14,11 +14,11 @@
 *  limitations under the License.
 
 *  @author Alejandro Sebastian Scotti
-*  @version v08-11-22-22-00
+*  @version v08-11-22-22-09
 *******************************************/
 
 function mamboTools() { 
-const tools = {};
+const tools = {class:{}};
 tools.class.APIManager = function APIManager(props) {
   let m_config;
   this.get = get;
