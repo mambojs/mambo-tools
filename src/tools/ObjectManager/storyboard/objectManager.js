@@ -1,8 +1,4 @@
 function objectManager() {
-	const router = object.get("router");
-	const dom = object.get("dom");
-	const ui = object.get("ui");
-	const container = document.querySelector("demo-object");
-
-	container.innerHTML = "soy OBJECT";
+	const container = document.querySelector("tab-demo");
+	container.innerHTML = "soy Object Manager";
 }

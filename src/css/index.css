@@ -5,11 +5,14 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  display: grid;
 }
 
 * {
   font-family: "Ubuntu Light", sans-serif;
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
