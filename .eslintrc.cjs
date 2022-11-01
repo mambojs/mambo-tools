@@ -26,5 +26,12 @@ module.exports = {
 		object: true,
 		dom: true,
 		tools: true,
+		mamboTools: true,
+		mamboUI: true,
+		domJS: true,
+		router: true,
+		ui: true,
+		PR: true,
+		installStoryboard: true,
 	},
 };

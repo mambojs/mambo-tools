@@ -1,8 +1,5 @@
 function utilities() {
-	const router = object.get("router");
-	const dom = object.get("dom");
-	const ui = object.get("ui");
-	const container = document.querySelector("demo-utils");
+	const container = document.querySelector("tab-demo");
 
-	container.innerHTML = "soy UTILS";
+	container.innerHTML = "soy Utils";
 }

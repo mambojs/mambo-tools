@@ -5,7 +5,7 @@ object.save(tools.string(), "string");
 object.save(tools.history(), "history");
 object.save(tools.router({ historyManager: object.get("history") }), "router");
 object.save(tools.api(), "api");
-object.save(mamboUI(), "ui");
+object.save(mamboUI(domJS), "ui");
 object.save(domJS(), "dom");
 
 // Begin Storyboard development installation
