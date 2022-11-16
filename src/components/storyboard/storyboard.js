@@ -113,7 +113,7 @@ function installStoryboard() {
 	}
 
 	async function getDescription(story) {
-		return await (await fetch(`getFile?path=src/tools/${story}/storyboard/description.md`)).text();
+		return await tools.api().getFileContent(`getFile?path=src/tools/${story}/storyboard/description.md`);
 	}
 
 }
