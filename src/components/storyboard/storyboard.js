@@ -58,8 +58,7 @@ function installStoryboard() {
 		storyParentTag.appendChild(dom.createTag("h4", { text: selectedStory.text }));
 		storyParentTag.appendChild(selectedStory.parentTag);
 
-		installTab(selectedStory)
-
+		installTab(selectedStory);
 	}
 
 	function installTab(props) {
@@ -95,12 +94,13 @@ function installStoryboard() {
 				contentTag.appendChild(content);
 
 				switch (tab.area) {
-					case "tab-description":
+					case "tab-description": {
 						const desc = await getDescription(props.text);
 						dom.append(content, desc);
 						break;
+					}
 					case "tab-code":
-						dom.append(content, `<pre>${storyFnContent}</pre>`)
+						dom.append(content, `<pre>${storyFnContent}</pre>`);
 						break;
 					case "tab-demo":
 						storyFn(props);
@@ -115,5 +115,4 @@ function installStoryboard() {
 	async function getDescription(story) {
 		return await tools.api().getFileContent(`getFile?path=src/tools/${story}/storyboard/description.md`);
 	}
-
 }
