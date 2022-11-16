@@ -53,6 +53,10 @@ storyboard-component h4 {
   overflow: auto;
 }
 
+.m-tab-content {
+  width: 100%;
+}
+
 .mambo-btn {
   color: var(--font-color);
   border: solid 1px black;
@@ -67,6 +71,38 @@ storyboard-component h4 {
 .mambo-btn:hover {
   background-color: var(--mambo-blue);
   border-color: var(--mambo-blue);
+}
+
+tab-code pre {
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+tab-demo {
+  width: 100%;
+}
+
+tab-demo pre {
+  width:inherit;
+  min-height:5em;
+  border:solid;
+  margin:.5em 0 1em;
+  padding:1em;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+/* API Manager */
+story-apimanager tab-demo mambo-radio-group {
+  display: flex;
+  margin: .5em 0;
+}
+story-apimanager tab-demo mambo-checkbox {
+  display: flex;
+  margin: .5em 0;
+}
+story-apimanager tab-demo pre {
+  display: inline-block;
 }
 
 /* Mambo Tab frame styles */
