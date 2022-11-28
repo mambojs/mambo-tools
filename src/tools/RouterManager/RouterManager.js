@@ -1,14 +1,5 @@
-tools.class.RouterManager = function RouterManager(props = {}) {
+tools.class.RouterManager = function RouterManager() {
 	const self = this;
-	const utils = object.get("utils");
-
-	// Resolve History Manager dependency
-	const { historyManager } = props;
-	if (!historyManager) {
-		alert("RouterManager: the dependency historyManager instance is a required prop.");
-		return;
-	}
-
 	window.addEventListener("locationchange", setRoute);
 
 	let current = {
@@ -26,6 +17,7 @@ tools.class.RouterManager = function RouterManager(props = {}) {
 		query: "",
 	};
 
+	let historyManager;
 	let routesList = [];
 
 	this.add = addRoutes;
@@ -115,8 +107,13 @@ tools.class.RouterManager = function RouterManager(props = {}) {
 
 			routesList = args.concat(routesList);
 
-			const { matched, path } = matchedRouteBy({ path: location.pathname });
-			if (matched) historyManager.setPath(path);
+			if (!historyManager) {
+				const { matched, path } = matchedRouteBy({ path: location.pathname });
+
+				if (matched) {
+					historyManager = tools.history(path);
+				}
+            }
 
 			return;
 		}
@@ -141,6 +138,7 @@ tools.class.RouterManager = function RouterManager(props = {}) {
 				{ name: "query", type: "String" },
 				{ name: "hash", type: "String" },
 			];
+
 			let wrongKeysValues = [];
 
 			const isAllKeysValid = Object.entries(args).every((arr) => {
@@ -177,6 +175,7 @@ tools.class.RouterManager = function RouterManager(props = {}) {
 		}
 
 		const hasNotFound = routesList.find((route) => route.notfound);
+
 		if (hasNotFound) {
 			return { matched: true, path: hasNotFound.path };
 		}
@@ -224,9 +223,7 @@ tools.class.RouterManager = function RouterManager(props = {}) {
 
 	function setRoute() {
 		const currentRouteObject = routesList.find((route) => route.path === history.state || route.alias === history.state);
-
 		updateCurrent(currentRouteObject);
-
 		runAction();
 	}
 
@@ -235,7 +232,7 @@ tools.class.RouterManager = function RouterManager(props = {}) {
 			self.current = current;
 		}
 
-		self.current = utils.extend(true, self.current, currentRouteObject);
+		self.current = tools.utils().extend(true, self.current, currentRouteObject);
 	}
 };
 

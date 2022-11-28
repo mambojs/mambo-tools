@@ -1,8 +1,6 @@
-tools.class.HistoryManager = function HistoryManager() {
+tools.class.HistoryManager = function HistoryManager(path) {
 	const popstate = new Event("popstate");
 	const locationchange = new Event("locationchange");
-
-	let path;
 
 	// Public methods
 	this.back = backState;
@@ -11,14 +9,9 @@ tools.class.HistoryManager = function HistoryManager() {
 	this.go = goToState;
 	this.pushState = pushState;
 	this.replaceState = replaceState;
-	this.setPath = setPath;
 
 	setupEventHandler();
 	checkHistory();
-
-	function setPath(newPath) {
-		path = newPath;
-	}
 
 	function pushState(state, title, path) {
 		setPageTitle(title);
