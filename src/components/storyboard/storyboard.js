@@ -1,12 +1,14 @@
 function installStoryboard() {
 	const dom = object.get("dom");
 	const ui = object.get("ui");
+	const router = object.get("router");
 	const storyParentTag = dom.getTag("storyboard-component");
 	let stories;
 	setup();
 
 	function setup() {
 		configureStoriesData();
+		setRoutes();
 		installComponentTreeView();
 	}
 
@@ -30,7 +32,46 @@ function installStoryboard() {
 		});
 	}
 
+	function setRoutes() {
+
+		let routes = [
+			{
+				name: "Home",
+				path: "/",
+				action: () => showPageContent("Home")
+			},
+			{
+				name: "404",
+				path: "/404",
+				notfound: true,
+				action: () => showPageContent("Not Found"),
+			}
+		];
+
+		stories.forEach(story => {
+			routes.push(
+				{
+					name: story.text,
+					path: `/${story.fn.toLowerCase()}`,
+					action: () => {
+						loadComponent(story);
+					}
+				}
+			);
+		});
+
+		router.routes(routes);
+	}
+
+	function showPageContent(page) {
+		const tag = dom.createTag(`story-${page.replace(" ", "-").toLowerCase()}`);
+		storyParentTag.innerHTML = null;
+		storyParentTag.appendChild(dom.createTag("h4", { text: page }));
+		storyParentTag.appendChild(tag);
+	}
+
 	function installComponentTreeView() {
+
 		const treeViewConfig = {
 			parentTag: "storyboard-treeview",
 			data: [
@@ -40,13 +81,17 @@ function installStoryboard() {
 				},
 			],
 			expanded: true,
-			fnSelect: loadComponent,
+			fnSelect: goTo,
 		};
 
 		ui.treeView(treeViewConfig);
 	}
 
-	function loadComponent({ itemData }) {
+	function goTo({ itemData }) {
+		router.push({ path: `/${itemData.id}` });
+	}
+
+	function loadComponent(itemData) {
 		if (!itemData.id) {
 			// User clicked the main Tree
 			return;
@@ -58,7 +103,9 @@ function installStoryboard() {
 		storyParentTag.appendChild(dom.createTag("h4", { text: selectedStory.text }));
 		storyParentTag.appendChild(selectedStory.parentTag);
 
-		installTab(selectedStory);
+		if (!itemData.page) {
+			installTab(selectedStory);
+		}
 	}
 
 	function installTab(props) {
