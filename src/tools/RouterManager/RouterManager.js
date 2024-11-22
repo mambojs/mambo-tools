@@ -12,7 +12,7 @@ tools.class.RouterManager = function RouterManager(props) {
 		query: "",
 	};
 
-	let historyManager;
+	let historyManager = props.historyManager;
 	let m_routesList = [];
 	let m_eventListener;
 	let m_routerEvents = [{ name: "onBeforeRouteUpdate", used: false }];
@@ -365,6 +365,7 @@ tools.class.RouterManager = function RouterManager(props) {
 		m_props = {
 			basePath: [],
 			baseStrict: false,
+			events: () => {},
 		};
 
 		m_props = tools.utils().extend(true, m_props, props);

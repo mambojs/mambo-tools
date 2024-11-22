@@ -2,7 +2,8 @@
 const object = tools.object();
 object.save(tools.utils(), "utils");
 object.save(tools.string(), "string");
-object.save(tools.router(), "router");
+object.save(tools.history(), "history");
+object.save(tools.router({ historyManager: object.get("history") }), "router");
 object.save(tools.api(), "api");
 object.save(mamboUI(domJS), "ui");
 object.save(domJS(), "dom");
