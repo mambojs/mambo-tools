@@ -1,13 +1,15 @@
+const { version } = require("../package.json");
 const config = require("./config.cjs");
 const LIB_DIR = "build";
 const LIB_NAME = "mambo-tools";
-const LIB_VERSION = `v${dateFormat()}`;
+const LIB_VERSION = version;
 const LIB_FILE_NAME = `${LIB_NAME}-${LIB_VERSION}`;
 const LIB_FILE_NAME_MIN = `${LIB_NAME}-min-${LIB_VERSION}`;
 const SRC_TOOLS = `${config.PUBLIC_DIR}/tools`;
+const CURRENT_YEAR = new Date().getFullYear();
 
 const COPYRIGHT = `/******************************************
-*  Copyright 2022 Alejandro Sebastian Scotti, Scotti Corp.
+*  Copyright ${CURRENT_YEAR} Alejandro Sebastian Scotti, Scotti Corp.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.

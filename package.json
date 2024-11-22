@@ -14,7 +14,8 @@
 		"clint": "npx stylelint \"./**/*.css\"",
 		"precommit": "npm run validate",
 		"prepush": "npm run validate",
-		"build": "node ./setup/esbuild.cjs buildLib"
+		"build": "node ./setup/esbuild.cjs buildLib",
+		"build-documentation": "npm run build && node ./setup/build_documentation.cjs"
 	},
 	"dependencies": {
 		"express": "^4.17.1",

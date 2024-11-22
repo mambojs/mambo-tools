@@ -60,7 +60,8 @@ function installStoryboard() {
 			);
 		});
 
-		router.routes(routes);
+		router.routes({ historyManager: object.get("history"), routes: routes });
+		router.add(routes);
 	}
 
 	function showPageContent(page) {
