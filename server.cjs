@@ -35,6 +35,17 @@ app.get("/getFile", (req, res) => {
 	});
 });
 
+app.get("/getDocumentation", (req, res) => {
+	const s = separator;
+	const filePath = "documentation/documentation.md";
+	const myPath = path.join(`${__dirname}${s}${filePath}`);
+
+	fs.readFile(myPath, "utf8", (err, file) => {
+		if (err) return res.send(err);
+		res.send(file);
+	});
+});
+
 // Return Index.html
 app.get("*", (req, res) => {
 	res.sendFile(path.resolve(__dirname, config.OUTPUT_HTML));

@@ -23,6 +23,7 @@ module.exports = {
 		semi: ["error", "always"],
 	},
 	globals: {
+		marked: true,
 		object: true,
 		dom: true,
 		tools: true,
