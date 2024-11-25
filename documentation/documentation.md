@@ -1,38 +1,40 @@
-# Table of Contents
+# MAMBO TOOLS
+## Tool Components Documentation - Version 0.0.1
 
-- [APIManager](#apimanager-documentation)
-- [DateManager](#datemanager-documentation)
-- [EventManager](#eventmanager-documentation)
-- [HistoryManager](#historymanager-documentation)
-- [ObjectManager](#objectmanager-documentation)
-- [RouterManager](#routermanager-documentation)
-- [String](#string-documentation)
-- [Utilities](#utilities-documentation)
+### Table of Contents
+1. [APIManager](#apimanager)
+2. [DateManager](#datemanager)
+3. [EventManager](#eventmanager)
+4. [HistoryManager](#historymanager)
+5. [ObjectManager](#objectmanager)
+6. [RouterManager](#routermanager)
+7. [String](#string)
+8. [Utilities](#utilities)
 
-# APIManager Documentation
+## APIManager
 
 A client-side API manager for handling HTTP requests with support for caching, progress tracking, and various response formats.
 
-## Public Properties (m_props)
+### Public Properties (m_props)
 
-### timeout
+#### timeout
 - **Type**: Number
 - **Default**: `5000`
 - **Description**: Maximum time in milliseconds to wait for a request to complete before aborting.
 
-## Private Properties
+### Private Properties
 
-### m_config
+#### m_config
 - **Type**: Object
 - **Description**: Stores configuration settings
 - **Properties**:
   - `timeout` (Number): Request timeout in milliseconds
 
-### m_eventListener
+#### m_eventListener
 - **Type**: HTMLElement
 - **Description**: DOM element used for handling API events
 
-### m_cached
+#### m_cached
 - **Type**: Object
 - **Description**: Cache storage for API responses
 - **Structure**: 
@@ -44,81 +46,81 @@ A client-side API manager for handling HTTP requests with support for caching, p
   }
   ```
 
-## Public Methods
+### Public Methods
 
-### delete(url, custom)
+#### delete(url, custom)
 Performs HTTP DELETE request
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options
 
-### get(url, custom)
+#### get(url, custom)
 Performs HTTP GET request
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options
 
-### getCache()
+#### getCache()
 Returns the current cache storage
 - **Returns**: Object containing all cached responses
 
-### getFile(url, custom)
+#### getFile(url, custom)
 Retrieves a file as blob
 - **Parameters**:
   - `url` (String): File URL
   - `custom` (Object, optional): Custom request options
 
-### getFileContent(url, custom)
+#### getFileContent(url, custom)
 Retrieves file content as text
 - **Parameters**:
   - `url` (String): File URL
   - `custom` (Object, optional): Custom request options
 
-### getJSON(url, custom)
+#### getJSON(url, custom)
 Retrieves and parses JSON data
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options including format ('string', 'pretty')
 
-### getXML(url, custom)
+#### getXML(url, custom)
 Retrieves and parses XML data
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options including format ('string', 'xml')
 
-### head(url, custom)
+#### head(url, custom)
 Performs HTTP HEAD request
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options
 
-### patch(url, custom)
+#### patch(url, custom)
 Performs HTTP PATCH request
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options with body
 
-### post(url, custom)
+#### post(url, custom)
 Performs HTTP POST request
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options with body
 
-### postJSON(url, custom)
+#### postJSON(url, custom)
 Performs HTTP POST request with JSON data
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options with JSON body
 
-### put(url, custom)
+#### put(url, custom)
 Performs HTTP PUT request
 - **Parameters**:
   - `url` (String): Request URL
   - `custom` (Object, optional): Custom request options with body
 
-## Private Methods
+### Private Methods
 
-### processResponse(response, custom, type, cacheKey)
+#### processResponse(response, custom, type, cacheKey)
 Processes API response based on type and caching requirements
 - **Parameters**:
   - `response` (Response): Fetch response object
@@ -126,67 +128,67 @@ Processes API response based on type and caching requirements
   - `type` (String): Response type ('json', 'blob', 'text', 'xml')
   - `cacheKey` (String): Cache identifier
 
-### execRequest(url, options, key)
+#### execRequest(url, options, key)
 Executes the fetch request with configuration
 - **Parameters**:
   - `url` (String): Request URL
   - `options` (Object): Fetch options
   - `key` (String): Cache key
 
-### progressProcess(response, url, cacheKey)
+#### progressProcess(response, url, cacheKey)
 Handles request progress tracking
 - **Parameters**:
   - `response` (Response): Fetch response
   - `url` (String): Request URL
   - `cacheKey` (String): Cache identifier
 
-### prepareEvents(options)
+#### prepareEvents(options)
 Sets up event listeners for request lifecycle
 - **Parameter**: `options` (Object): Request options with events
 
-### getEvents()
+#### getEvents()
 Creates event handler object for API events
 - **Returns**: Object with event handlers for error, load, loadstart, and progress
 
-### cacheKey(url, options)
+#### cacheKey(url, options)
 Generates unique cache key
 - **Parameters**:
   - `url` (String): Request URL
   - `options` (Object): Request options
 
-### cacheSave(custom, cacheKey, finalResponse)
+#### cacheSave(custom, cacheKey, finalResponse)
 Saves response to cache
 - **Parameters**:
   - `custom` (Object): Custom options
   - `cacheKey` (String): Cache identifier
   - `finalResponse` (Any): Response data to cache
 
-### configure()
+#### configure()
 Initializes configuration with defaults and custom options
 
-# DateManager Documentation
+## DateManager
 
 A utility class for handling date operations, formatting, and manipulations.
 
-## Private Properties
+### Private Properties
 
-### m_formatTokens
+#### m_formatTokens
 - **Type**: RegExp
 - **Description**: Regular expression for parsing date format tokens
 
-### weekdays
+#### weekdays
 - **Type**: Array
 - **Description**: List of weekday names in English
 - **Values**: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-### monthNames
+#### monthNames
 - **Type**: Array
 - **Description**: List of month names in English
 - **Values**: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-## Public Methods
+### Public Methods
 
-### add(date, number, token)
+#### add(date, number, token)
 Adds time to a date
 - **Parameters**:
   - `date` (Date): Date to modify
@@ -194,19 +196,19 @@ Adds time to a date
   - `token` (String): Unit of time ('minutes'/'m', 'hours'/'h', 'days'/'d', 'months'/'M', 'years'/'Y')
 - **Returns**: DateManager instance for chaining
 
-### cloneDate(date)
+#### cloneDate(date)
 Creates a copy of a date object
 - **Parameter**: `date` (Date)
 - **Returns**: New Date object
 
-### createDate(text, formatText)
+#### createDate(text, formatText)
 Creates a date from a string using specified format
 - **Parameters**:
   - `text` (String): Date string to parse
   - `formatText` (String): Format pattern
 - **Returns**: Date object or null if invalid
 
-### createInterval(interval, token, min, max, formatText)
+#### createInterval(interval, token, min, max, formatText)
 Creates an array of dates between min and max
 - **Parameters**:
   - `interval` (Number): Time interval
@@ -216,114 +218,112 @@ Creates an array of dates between min and max
   - `formatText` (String, optional): Format for output dates
 - **Returns**: Array of dates or formatted strings
 
-### endOf(date, token)
+#### endOf(date, token)
 Sets date to end of period
 - **Parameters**:
   - `date` (Date): Date to modify
   - `token` (String): Period ('month'/'M', 'year'/'Y', 'decade', 'century')
 - **Returns**: DateManager instance
 
-### format(date, formatText)
+#### format(date, formatText)
 Formats a date according to specified pattern
 - **Parameters**:
   - `date` (Date): Date to format
   - `formatText` (String): Format pattern
 - **Returns**: Formatted date string
 
-### getDate(value, formatText)
+#### getDate(value, formatText)
 Converts value to date object
 - **Parameters**:
   - `value` (Date|String): Value to convert
   - `formatText` (String): Format pattern if value is string
 - **Returns**: Date object
 
-### getDayName(day)
+#### getDayName(day)
 Gets name of weekday
 - **Parameter**: `day` (Number): Day index (0-6)
 - **Returns**: Weekday name
 
-### getToday()
+#### getToday()
 Gets current date at midnight
 - **Returns**: Date object
 
-### isAfter(date1, date2)
+#### isAfter(date1, date2)
 Checks if date1 is after date2
 - **Returns**: Boolean
 
-### isSameOrAfter(date1, date2)
+#### isSameOrAfter(date1, date2)
 Checks if date1 is same as or after date2
 - **Returns**: Boolean
 
-### isBefore(date1, date2)
+#### isBefore(date1, date2)
 Checks if date1 is before date2
 - **Returns**: Boolean
 
-### isSame(date1, date2)
+#### isSame(date1, date2)
 Checks if dates are same
 - **Returns**: Boolean
 
-### isSameOrBefore(date1, date2)
+#### isSameOrBefore(date1, date2)
 Checks if date1 is same as or before date2
 - **Returns**: Boolean
 
-### isDate(value)
+#### isDate(value)
 Checks if value is Date object
 - **Returns**: Boolean
 
-### startOf(date, token)
+#### startOf(date, token)
 Sets date to start of period
 - **Parameters**:
   - `date` (Date): Date to modify
   - `token` (String): Period ('week'/'w', 'month'/'M', 'year'/'Y', 'decade', 'century')
 - **Returns**: DateManager instance
 
-## Private Methods
+### Private Methods
 
-### getHours(date, is12Format)
+#### getHours(date, is12Format)
 Gets hours in 12 or 24-hour format
 - **Parameters**:
   - `date` (Date): Date object
   - `is12Format` (Boolean): Whether to use 12-hour format
 - **Returns**: Number
 
-### getAMPM(date)
+#### getAMPM(date)
 Gets AM/PM indicator
 - **Parameter**: `date` (Date)
 - **Returns**: 'am' or 'pm'
 
-### getMonthName(month)
+#### getMonthName(month)
 Gets name of month
 - **Parameter**: `month` (Number): Month index (0-11)
 - **Returns**: Month name
 
-### addZero(value, n)
+#### addZero(value, n)
 Pads number with leading zeros
 - **Parameters**:
   - `value` (Number): Number to pad
   - `n` (Number): Desired length
 - **Returns**: Padded string
 
-### isString(value)
+#### isString(value)
 Checks if value is string
 - **Returns**: Boolean
 
-### isNumber(value)
+#### isNumber(value)
 Checks if value is number
 - **Returns**: Boolean
 
-
-
-# EventManager Documentation
+## EventManager
 
 A simple event management system that allows components to communicate through custom events.
 
-## Private Properties
+### Private Properties
 
-### m_eventDirectory
+#### m_eventDirectory
 - **Type**: MamboEventDirectory
 - **Description**: Instance containing all available event names
 
-### m_events
+#### m_events
 - **Type**: Object
 - **Description**: Reference to available events from m_eventDirectory
 - **Structure**:
@@ -333,7 +333,7 @@ A simple event management system that allows components to communicate through c
   }
   ```
 
-### m_listeners
+#### m_listeners
 - **Type**: Object
 - **Description**: Storage for event listeners
 - **Structure**:
@@ -345,9 +345,9 @@ A simple event management system that allows components to communicate through c
   }
   ```
 
-## Public Methods
+### Public Methods
 
-### addEventListener(listener, event, fn)
+#### addEventListener(listener, event, fn)
 Registers a new event listener
 - **Parameters**:
   - `listener` (String): Unique identifier for the listener
@@ -358,26 +358,26 @@ Registers a new event listener
   - Ensures unique listener names
   - Validates callback is a function
 
-### fireEvent(event, data)
+#### fireEvent(event, data)
 Triggers an event and notifies all listeners
 - **Parameters**:
   - `event` (String): Event name to trigger
   - `data` (Any): Data to pass to event listeners
 
-### removeEventListener(listener, event)
+#### removeEventListener(listener, event)
 Removes a specific event listener
 - **Parameters**:
   - `listener` (String): Listener identifier to remove
   - `event` (String): Event name to remove listener from
 
-## Private Methods
+### Private Methods
 
-### initializeListeners()
+#### initializeListeners()
 Initializes the listeners object with empty collections for each available event
 
-## MamboEventDirectory Class
+### MamboEventDirectory Class
 
-### events
+#### events
 - **Type**: Object
 - **Description**: Registry of all available events
 - **Current Events**:
@@ -385,77 +385,77 @@ Initializes the listeners object with empty collections for each available event
 
 
 
-# HistoryManager Documentation
+## HistoryManager
 
 A wrapper for browser history management that provides methods for navigation and state manipulation.
 
-## Private Properties
+### Private Properties
 
-### popstate
+#### popstate
 - **Type**: Event
 - **Description**: Custom event for history state changes
 
-### locationchange
+#### locationchange
 - **Type**: Event
 - **Description**: Custom event for location changes
 
-## Public Methods
+### Public Methods
 
-### back()
+#### back()
 Navigates to previous state in history
 - **Description**: Wrapper for `history.back()`
 
-### clearState(state, title)
+#### clearState(state, title)
 Clears history state and resets to root path
 - **Parameters**:
   - `state` (Object): State object to store
   - `title` (String): Page title to set
 
-### forward()
+#### forward()
 Navigates to next state in history
 - **Description**: Wrapper for `history.forward()`
 
-### go(args)
+#### go(args)
 Navigates to specific point in history
 - **Parameter**: `args` (Number): Number of steps to move (positive or negative)
 
-### pushState(state, title, path)
+#### pushState(state, title, path)
 Adds new state to history
 - **Parameters**:
   - `state` (Object): State object to store
   - `title` (String): Page title to set
   - `path` (String): URL path to push
 
-### replaceState(state, title, path)
+#### replaceState(state, title, path)
 Replaces current history state
 - **Parameters**:
   - `state` (Object): State object to store
   - `title` (String): Page title to set
   - `path` (String): URL path to set
 
-## Private Methods
+### Private Methods
 
-### setPageTitle(title)
+#### setPageTitle(title)
 Updates document title
 - **Parameter**: `title` (String): New page title
 
-### setupEventHandler()
+#### setupEventHandler()
 Initializes event listeners for history changes
 - **Description**: Sets up popstate and locationchange event handling
 
-### checkHistory()
+#### checkHistory()
 Verifies history state on initialization
 - **Description**: Ensures valid initial state exists, creates one if needed
 
 
 
-# ObjectManager Documentation
+## ObjectManager
 
 A simple object storage manager that provides a central repository for storing and retrieving objects.
 
-## Private Properties
+### Private Properties
 
-### store
+#### store
 - **Type**: Object
 - **Description**: Internal storage object that holds all saved objects
 - **Structure**:
@@ -465,14 +465,14 @@ A simple object storage manager that provides a central repository for storing a
   }
   ```
 
-## Public Methods
+### Public Methods
 
-### get(name)
+#### get(name)
 Retrieves an object from storage
 - **Parameter**: `name` (String): Name of object to retrieve
 - **Returns**: Stored object or undefined if not found
 
-### save(object, name)
+#### save(object, name)
 Stores an object in the library
 - **Parameters**:
   - `object` (Any): Object to store
@@ -480,52 +480,52 @@ Stores an object in the library
     - If name not provided, uses object's constructor name
 - **Description**: Stores object with either provided name or object's constructor name as key
 
-### remove(name)
+#### remove(name)
 Removes an object from storage
 - **Parameter**: `name` (String): Name of object to remove
 - **Returns**: Boolean indicating if deletion was successful
 
-### getLibrary()
+#### getLibrary()
 Returns entire storage object
 - **Returns**: Object containing all stored objects
 
-### clearLibrary()
+#### clearLibrary()
 Resets the storage to empty state
 - **Description**: Replaces store with empty object
 
-## Private Methods
+### Private Methods
 
-### saveObject(object, name)
+#### saveObject(object, name)
 Internal implementation of save method
 - **Parameters**:
   - `object` (Any): Object to store
   - `name` (String, optional): Custom name for storage
 - **Description**: Determines storage key and saves object to store
 
-# RouterManager Documentation
+## RouterManager
 
 A client-side router manager for handling navigation and route management in web applications.
 
-## Public Properties (m_props)
+### Public Properties (m_props)
 
-### basePath
+#### basePath
 - **Type**: Array
 - **Default**: `[]`
 - **Description**: List of base paths that will be prepended to all routes. Useful for applications that don't run at the root domain.
 
-### baseStrict
+#### baseStrict
 - **Type**: Boolean
 - **Default**: `false`
 - **Description**: When true, routes will only work with the defined basePath. When false, routes will work both with and without the basePath.
 
-### events
+#### events
 - **Type**: Function
 - **Default**: `() => {}`
 - **Description**: Callback function to set up router events. Receives an event object with router lifecycle hooks.
 
-## Private Properties
+### Private Properties
 
-### current
+#### current
 - **Type**: Object
 - **Description**: Stores information about the current route state
 - **Properties**:
@@ -536,33 +536,33 @@ A client-side router manager for handling navigation and route management in web
   - `params` (Object): Route parameters
   - `query` (String): URL query string
 
-### historyManager
+#### historyManager
 - **Type**: Object
 - **Description**: Instance that manages browser history operations
 
-### m_routesList
+#### m_routesList
 - **Type**: Array
 - **Description**: Internal storage of all registered routes
 
-### m_eventListener
+#### m_eventListener
 - **Type**: HTMLElement
 - **Description**: DOM element used for handling router events
 
-### m_routerEvents
+#### m_routerEvents
 - **Type**: Array
 - **Description**: List of available router events and their usage status
 
-### m_lastRoute
+#### m_lastRoute
 - **Type**: Object
 - **Description**: Stores information about the previous route
 
-### m_newMatchedObject
+#### m_newMatchedObject
 - **Type**: Object
 - **Description**: Temporary storage for newly matched route information
 
-## Public Methods
+### Public Methods
 
-### add(routes)
+#### add(routes)
 Adds new routes to the router configuration
 - **Parameter**: `routes` (Array)
 - **Route Object Properties**:
@@ -571,17 +571,17 @@ Adds new routes to the router configuration
   - `alias` (String, optional): Alternative path for the same route
   - `notfound` (Boolean, optional): Indicates if this is a 404 route
 
-### back()
+#### back()
 Navigates to the previous route in browser history
 
-### go(steps)
+#### go(steps)
 Navigates forward or backward in browser history
 - **Parameter**: `steps` (Number) - Positive numbers move forward, negative numbers move backward
 
-### next()
+#### next()
 Navigates to the next route in browser history
 
-### push(routeObject, dispatch)
+#### push(routeObject, dispatch)
 Navigates to a new route and adds it to history
 - **Parameters**:
   - `routeObject` (Object):
@@ -592,60 +592,60 @@ Navigates to a new route and adds it to history
     - `hash` (String, optional): URL hash
   - `dispatch` (Boolean, default: true): Whether to trigger route events
 
-### replace(routeObject)
+#### replace(routeObject)
 Replaces current route without adding to history
 - **Parameter**: `routeObject` (Object) - Same structure as push() routeObject
 
-### routes(routes)
+#### routes(routes)
 Gets or sets the router configuration
 - **Parameter**: `routes` (Array, optional) - List of route objects
 - **Returns**: Current routes array when called without parameters
 
-### init()
+#### init()
 Initializes the router with current browser location
 
-## Private Methods
+### Private Methods
 
-### checkBasePath(path)
+#### checkBasePath(path)
 Validates and prepends base paths to a route path
 - **Parameter**: `path` (String) - Route path to process
 - **Returns**: String or Array of paths including base paths
 
-### checkRoutesFormat(routes)
+#### checkRoutesFormat(routes)
 Validates that all routes have the required format
 - **Parameter**: `routes` (Array) - List of route objects to validate
 - **Returns**: Boolean indicating if format is valid
 
-### checkRoutesDuplicated(routes)
+#### checkRoutesDuplicated(routes)
 Checks for duplicate route names or paths
 - **Parameter**: `routes` (Array) - List of routes to check
 - **Returns**: Boolean indicating if duplicates were found
 
-### isCurrentRoute(routeObject)
+#### isCurrentRoute(routeObject)
 Determines if a route matches the current route
 - **Parameter**: `routeObject` (Object) - Route to check
 - **Returns**: Boolean
 
-### matchedRouteBy(options)
+#### matchedRouteBy(options)
 Finds a matching route based on path or name
 - **Parameter**: `options` (Object):
   - `path` (String, optional): Route path to match
   - `name` (String, optional): Route name to match
 - **Returns**: Object with matching information
 
-### setRoute()
+#### setRoute()
 Updates route state after navigation and executes route actions
 
-### updateCurrent(currentRouteObject, recycle)
+#### updateCurrent(currentRouteObject, recycle)
 Updates the current route information
 - **Parameters**:
   - `currentRouteObject` (Object): New route information
   - `recycle` (Boolean): Whether to reset current object
 
-### prepareEvents()
+#### prepareEvents()
 Initializes router event listeners and sets up event handling
 
-### execDispatch(event, currentObject, newMatchedObject, path)
+#### execDispatch(event, currentObject, newMatchedObject, path)
 Dispatches router events to listeners
 - **Parameters**:
   - `event` (String): Event name to dispatch
@@ -655,13 +655,13 @@ Dispatches router events to listeners
 
 
 
-# String Documentation
+## String
 
 A utility class for string operations and array text searching.
 
-## Public Methods
+### Public Methods
 
-### filterArray(array, searchText, getItemTextFunc, filter)
+#### filterArray(array, searchText, getItemTextFunc, filter)
 Filters an array based on text search criteria
 - **Parameters**:
   - `array` (Array): Array to filter
@@ -670,7 +670,7 @@ Filters an array based on text search criteria
   - `filter` (String): Search type ('contains' or 'equals')
 - **Returns**: Filtered array
 
-### findInArray(array, searchText, getItemTextFunc, filter)
+#### findInArray(array, searchText, getItemTextFunc, filter)
 Finds first array item matching search criteria
 - **Parameters**:
   - `array` (Array): Array to search
@@ -679,80 +679,80 @@ Finds first array item matching search criteria
   - `filter` (String): Search type ('contains' or 'equals')
 - **Returns**: Matching item or undefined
 
-### getSearchFunction(filter)
+#### getSearchFunction(filter)
 Gets appropriate search function based on filter type
 - **Parameter**: `filter` (String): Search type ('contains' or 'equals')
 - **Returns**: Search function
 
-## Private Methods
+### Private Methods
 
-### contains(itemText, searchText)
+#### contains(itemText, searchText)
 Checks if item text contains search text (case-insensitive)
 - **Parameters**:
   - `itemText` (String): Text to search in
   - `searchText` (String): Text to search for
 - **Returns**: Boolean
 
-### equals(itemText, searchText)
+#### equals(itemText, searchText)
 Checks if item text equals search text (case-insensitive)
 - **Parameters**:
   - `itemText` (String): Text to compare
   - `searchText` (String): Text to compare against
 - **Returns**: Boolean
 
-# Utilities Documentation
+## Utilities
 
 A collection of utility functions for common operations.
 
-## Public Methods
+### Public Methods
 
-### clone(object)
+#### clone(object)
 Creates a deep copy of an object
 - **Parameter**: `object` (Object): Object to clone
 - **Returns**: New object copy
 
-### extend()
+#### extend()
 Merges multiple objects
 - **Parameters**:
   - First argument can be boolean for deep merge
   - Subsequent arguments are objects to merge
 - **Returns**: Merged object
 
-### formatPercentage(number, decimals)
+#### formatPercentage(number, decimals)
 Formats a number as percentage string
 - **Parameters**:
   - `number` (Number): Number to format
   - `decimals` (Number, default: 0): Decimal places
 - **Returns**: Formatted percentage string
 
-### getUniqueId(num)
+#### getUniqueId(num)
 Generates random numeric ID
 - **Parameter**: `num` (Number, default: 100000): Maximum value
 - **Returns**: Random number
 
-### isArray(value)
+#### isArray(value)
 Checks if value is array
 - **Returns**: Boolean
 
-### isNumber(value)
+#### isNumber(value)
 Checks if value is valid number
 - **Returns**: Boolean
 
-### isObject(value)
+#### isObject(value)
 Checks if value is object
 - **Returns**: Boolean
 
-### isString(value)
+#### isString(value)
 Checks if value is string
 - **Returns**: Boolean
 
-## Private Methods
+### Private Methods
 
-### merge(obj)
+#### merge(obj)
 Internal method for object merging
 - **Parameter**: `obj` (Object): Object to merge
 
-### mergeArray(array, extended, prop)
+#### mergeArray(array, extended, prop)
 Internal method for array merging
 - **Parameters**:
   - `array` (Array): Array to merge

@@ -2,14 +2,17 @@ function installStoryboard() {
 	const dom = object.get("dom");
 	const ui = object.get("ui");
 	const router = object.get("router");
-	const storyParentTag = dom.getTag("storyboard-component");
+	const storyParentTag = dom.getTag("story-tab");
 	let stories;
+	let documentations = {};
 	setup();
 
 	function setup() {
 		configureStoriesData();
 		setRoutes();
 		installComponentTreeView();
+		setupHomeButton();
+		loadDocumentation().then();
 	}
 
 	function configureStoriesData() {
@@ -102,7 +105,6 @@ function installStoryboard() {
 		selectedStory.parentTag.innerHTML = null;
 		storyParentTag.innerHTML = null;
 		storyParentTag.appendChild(dom.createTag("h4", { text: selectedStory.text }));
-		storyParentTag.appendChild(selectedStory.parentTag);
 
 		if (!itemData.page) {
 			installTab(selectedStory);
@@ -114,23 +116,25 @@ function installStoryboard() {
 		const storyFnContent = storyFn.toString();
 
 		let tabConfig = {
-			parentTag: props.parentTag,
+			parentTag: storyParentTag,
 			tabs: {
 				buttons: [
 					{
-						text: "Description",
-						area: "tab-description",
-						fnClick: (context) => {
-							// You can declare individual event handlers for tab clicks
-						},
+						text: "Demo",
+						area: "tab-demo",
 					},
 					{
 						text: "Code",
 						area: "tab-code",
+						class: {class: "code-container"}
 					},
 					{
-						text: "Demo",
-						area: "tab-demo",
+						text: "Documentation",
+						area: "tab-description",
+						class: { class: "documentation-container" },
+						fnClick: (context) => {
+							// You can declare individual event handlers for tab clicks
+						},
 					},
 				],
 				fnClick: (buttonContext) => {
@@ -138,7 +142,7 @@ function installStoryboard() {
 				},
 			},
 			fnTabComplete: async (contentTag, tab) => {
-				const content = dom.createTag(tab.area);
+				const content = dom.createTag(tab.area, tab.class);
 				contentTag.appendChild(content);
 
 				switch (tab.area) {
@@ -148,19 +152,84 @@ function installStoryboard() {
 						break;
 					}
 					case "tab-code":
-						dom.append(content, `<pre>${storyFnContent}</pre>`);
+						await outputCode(storyFnContent, content);
 						break;
 					case "tab-demo":
 						storyFn(props);
 						break;
-				}
-			},
+				}},
+
 		};
 
 		ui.tab(tabConfig);
 	}
 
 	async function getDescription(story) {
-		return await tools.api().getFileContent(`getFile?path=src/tools/${story}/storyboard/description.md`);
+		await outputDocumentation(story);
+	}
+
+	async function loadDocumentation() {
+		const file = await fetch("getDocumentation").then((resp) => resp.text());
+		const descriptionElement = dom.createTag("description-element");
+		descriptionElement.innerHTML = addIdsToHeadings(marked.parse(file));
+		storyParentTag.appendChild(descriptionElement);
+	}
+
+	function slugify(text) {
+		return text
+			.toString()
+			.toLowerCase()
+			.trim()
+			.replace(/[\s]+/g, " ")
+			.replace(/[^\w-]+/g, "");
+	}
+
+	function addIdsToHeadings(htmlContent) {
+		const tempDiv = document.createElement("div");
+		tempDiv.innerHTML = htmlContent;
+		const headings = tempDiv.querySelectorAll("h2");
+		documentations = {};
+
+		headings.forEach((heading, index) => {
+			const headingId = slugify(heading.textContent);
+			heading.setAttribute("id", headingId);
+
+			let sectionContent = `<h2 id="${headingId}">${heading.textContent}</h2>`;
+			let nextElement = heading.nextElementSibling;
+			while (nextElement && nextElement.tagName !== "H2") {
+				sectionContent += nextElement.outerHTML;
+				nextElement = nextElement.nextElementSibling;
+			}
+
+			documentations[headingId] = sectionContent;
+		});
+
+		return tempDiv.innerHTML;
+	}
+
+	function setupHomeButton() {
+		const homeButton = dom.getTag("#homeButton");
+		homeButton.setup({
+			id: "homeButton",
+			text: "Home",
+			fnClick: () => {
+				storyParentTag.innerHTML = null;
+				loadDocumentation();
+			},
+		});
+	}
+
+	async function outputCode(code, parentTag) {
+		const codeElement = dom.createTag("pre", { class: "prettyprint lang-basic", text: code });
+		parentTag.appendChild(codeElement);
+		PR.prettyPrint();
+	}
+
+	function outputDocumentation(storyName) {
+		const sectionId = slugify(storyName);
+		const documentationContainer = dom.getTag("tab-description");
+		if (documentations[sectionId]) {
+			documentationContainer.innerHTML = documentations[sectionId];
+		}
 	}
 }

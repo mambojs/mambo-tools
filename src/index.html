@@ -10,14 +10,17 @@
     <link rel="icon" href="src/img/mambo/mambo-m.ico" />
     <!-- Fonts -->
     <link rel="stylesheet" href="src/fonts/fonts.css" />
+    <link rel="stylesheet" href="src/lib/run_prettify.css" />
     <link rel="stylesheet" href="src/fonts/awesome/all.css" />
     <!-- Load all Styles -->
     <link rel="stylesheet" href="src/css/index.css"/>
-    <link rel="stylesheet" href="https://ui.mambojs.dev/dist/0.0.2/mambo-ui-0.0.2.css" />
+    <link rel="stylesheet" href="src/mambo-ui-0.0.2.css" />
     <link rel="stylesheet" href="src/components/storyboard/storyboard.css" />
     <!-- Load JavaScripts Dependencies -->
     <script src="https://dom.domjs.dev/dist/domjs-v09-14-22-19-58.js"></script>
-    <script src="https://ui.mambojs.dev/dist/0.0.2/mambo-ui-0.0.2.js"></script>
+    <script src="src/mambo-ui-0.0.2.js"></script>
+    <script src="src/lib/marked.min.js"></script>
+    <script src="src/lib/run_prettify.js"></script>
     <!-- Load Initializer JavaScript -->
     <script src="src/js/init.js"></script>
     <!-- Load Mambo Tools JavaScripts -->
@@ -44,6 +47,7 @@
     <tools-storyboard>
       <card-content>
         <card-header>
+          <mambo-button id="homeButton"></mambo-button>
           <button class="mambo-btn">Que es Mambo Tools?</button>
           <button class="mambo-btn">Como lo uso?</button>
           <button class="mambo-btn">DESCARGAR</button>

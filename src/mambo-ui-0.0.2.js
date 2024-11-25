@@ -1,5 +1,5 @@
 /******************************************
-*  Copyright 2022 Alejandro Sebastian Scotti, Scotti Corp.
+*  Copyright 2024 Alejandro Sebastian Scotti, Scotti Corp.
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 *  limitations under the License.
 
 *  @author Alejandro Sebastian Scotti
-*  @version v10-09-22-09-34
+*  @version 0.0.2
 *******************************************/
 function mamboUI(domJS) {
 	if (!domJS) {
@@ -521,14 +521,17 @@ ui.defaultTags = {
     tiles: { name: "m-tiles" }
   },
   input: {
-    input: { name: "input", attr: { type: "text" } }
+    container: { name: "m-input-container" },
+    input: { name: "input", attr: { type: "text" } },
+    iconRequired: { name: "i" },
+    textRequired: { name: "m-input-text-required" }
   },
   listbox: {
     container: { name: "m-listbox-container" },
     item: { name: "m-listbox-item" }
   },
   mapbox: {
-    container: { name: "div" },
+    container: { name: "m-mapbox-container" },
     currentPoint: { name: "m-mapbox-current-point" }
   },
   percentage: {
@@ -554,6 +557,10 @@ ui.defaultTags = {
     selected: { name: "m-rating-selected" },
     selectedStar: { name: "m-rating-selected-star" }
   },
+  search: {
+    inputContainer: { name: "m-search-input-container" },
+    wrapper: { name: "m-search-wrapper" }
+  },
   slideout: {
     body: { name: "m-slideout-body" },
     header: { name: "m-slideout-header" },
@@ -578,6 +585,17 @@ ui.defaultTags = {
     content: { name: "m-tab-content" },
     body: { name: "m-tab-body" },
     tabs: { name: "m-tabs" }
+  },
+  textarea: {
+    textarea: { name: "textarea", attr: {} },
+    span: { name: "span" },
+    buttonsContainer: { name: "m-textarea-buttons-container" },
+    iconsContainer: { name: "m-textarea-icons-container" },
+    footer: { name: "m-textarea-footer" },
+    iconRequired: { name: "i" },
+    textRequired: { name: "m-textarea-text-required" },
+    containerUp: { name: "m-textarea-container-up" },
+    containerDown: { name: "m-textarea-container-down" }
   },
   timePicker: {},
   treeView: {
@@ -618,8 +636,10 @@ ui.defaultTheme = {
     disabled: "m-button-disabled",
     hover: "m-hover",
     img: "m-button-img",
+    icon: "m-button-icon",
     selected: "m-selected",
-    self: "m-button-self"
+    self: "m-button-self",
+    pressed: "m-pressed"
   },
   buttonGroup: {
     button: {
@@ -828,12 +848,19 @@ ui.defaultTheme = {
     treeViewParent: "m-grid-tree-view-parent"
   },
   input: {
-    button: {
+    container: "m-input-container",
+    clearButton: {
       button: "m-input-button fa-solid fa-xmark"
+    },
+    leftButton: {
+      button: "m-input-button fa-solid fa-eye-slash"
     },
     input: "m-input-input",
     label: "m-input-label",
-    self: "m-input-self"
+    self: "m-input-self",
+    icon: "m-input-icon",
+    iconRequired: "m-input-icon-required fa-solid fa-exclamation-triangle hidden",
+    textRequired: "m-input-text-required hidden"
   },
   listbox: {
     container: "m-listbox-container",
@@ -880,6 +907,28 @@ ui.defaultTheme = {
     selected: "m-rating-selected",
     selectedStar: "m-rating-selected-star",
     self: "m-rating-self"
+  },
+  search: {
+    dropdown: {
+      button: {
+        button: "m-search-button fa-solid fa-magnifying-glass"
+      },
+      container: "m-search-dropdown-container",
+      self: "m-search-dropdown-parent"
+    },
+    input: {
+      input: "m-search-input-input",
+      inputWrapper: "m-search-input-wrapper"
+    },
+    inputContainer: "m-search-input-container",
+    listbox: {
+      item: "m-search-listbox-item"
+    },
+    searchButton: {
+      button: "m-search-button fa-solid fa-magnifying-glass"
+    },
+    self: "m-search-self",
+    wrapper: "m-search-dropdown-wrapper"
   },
   slideout: {
     body: "m-slideout-body",
@@ -944,6 +993,28 @@ ui.defaultTheme = {
     self: "m-tab-self",
     tabs: "m-tabs"
   },
+  textarea: {
+    cancelButton: {
+      button: "m-input-button fa-solid fa-xmark cancel-btn"
+    },
+    editButton: {
+      button: "m-input-button fa-solid fa-edit edit-btn"
+    },
+    checkButton: {
+      button: "m-input-button fa-solid fa-check check-btn"
+    },
+    buttonsContainer: "m-textarea-buttons-container",
+    containerDown: "m-textarea-container-down",
+    containerUp: "m-textarea-container-up",
+    footer: "m-textarea-footer",
+    iconsContainer: "m-textarea-icons-container",
+    iconRequired: "m-textarea-icon-required fa-solid fa-exclamation-triangle hidden",
+    label: "m-textarea-label",
+    span: "m-textarea-span",
+    self: "m-textarea-self",
+    textarea: "m-textarea-textarea",
+    textRequired: "m-textarea-text-required hidden"
+  },
   timePicker: {
     combobox: {
       dropdown: {
@@ -978,6 +1049,28 @@ ui.class.Theme = class Theme {
     this.m_themes = {
       default: ui.defaultTheme
     };
+    this.linkClass = "mambo-stylesheet";
+  }
+  loadStylesheets(context) {
+    return new Promise((resolve) => {
+      context?.stylesheets?.forEach((href) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.className = context.linkClass || this.linkClass;
+        document.head.appendChild(link);
+      });
+      resolve();
+    });
+  }
+  async reloadStylesheets(context) {
+    const links = document.querySelectorAll(`link.${context.linkClass || this.linkClass}`);
+    await this.loadStylesheets(context);
+    setTimeout(() => {
+      if (links?.length > 0) {
+        links.forEach((link) => link.remove());
+      }
+    }, 100);
   }
   getTheme(context) {
     if (context && context.name && context.component) {
@@ -1090,6 +1183,7 @@ ui.class.Button = class Button extends HTMLElement {
     super();
     const self = this;
     const m_imageList = [];
+    const m_iconList = [];
     let m_parentTag;
     let m_props;
     let m_buttonTag;
@@ -1100,6 +1194,7 @@ ui.class.Button = class Button extends HTMLElement {
     this.getConfig = () => m_props;
     this.getId = () => m_props.id;
     this.getImageTagById = getImageTagById;
+    this.getIconTagById = getIconTagById;
     this.getParentTag = () => m_parentTag;
     this.getTag = () => m_buttonTag;
     this.text = text;
@@ -1110,17 +1205,31 @@ ui.class.Button = class Button extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
     function setupDOM() {
       return new Promise((resolve) => {
         const tagConfig = { ...m_props.tags.button };
-        tagConfig.class = m_props.css.button;
+        let buttonClasses = [m_props.css.button];
+        if (m_props.size) {
+          buttonClasses.push(m_props.size);
+        }
+        if (!m_props.text) {
+          buttonClasses.push("notext");
+        }
+        if (m_props.type) {
+          buttonClasses.push(m_props.type);
+        }
+        tagConfig.class = buttonClasses.join(" ");
         tagConfig.text = m_props.text;
         tagConfig.event = {
           click: handleClick,
+          mousedown: handleMouseDown,
+          mouseup: handleMouseUp,
           mouseenter: () => {
             mouseEnterOverButton();
             mouseEnterOverImage();
@@ -1132,7 +1241,10 @@ ui.class.Button = class Button extends HTMLElement {
         };
         m_buttonTag = ui.d.createTag(tagConfig);
         if (m_props.img) {
-          insertGraphic(m_props.img);
+          insertGraphic();
+        }
+        if (m_props.icon) {
+          insertIcon();
         }
         self.classList.add(m_props.css.self);
         self.appendChild(m_buttonTag);
@@ -1157,11 +1269,42 @@ ui.class.Button = class Button extends HTMLElement {
         };
         let imgTag = ui.d.createTag("img", tagConfig);
         m_imageList.push(imgTag);
-        m_buttonTag.appendChild(imgTag);
+        if (img.position === "left") {
+          m_buttonTag.insertBefore(imgTag, m_buttonTag.firstChild);
+        } else {
+          m_buttonTag.appendChild(imgTag);
+        }
+      }
+    }
+    function insertIcon() {
+      if (Array.isArray(m_props.icon)) {
+        m_props.icon.forEach((icon) => {
+          addIcon(icon);
+        });
+      } else {
+        addIcon(m_props.icon);
+      }
+      function addIcon(icon) {
+        const cssClasses = [m_props.css.icon, icon.attr.class, icon.size].filter(Boolean).join(" ");
+        const tagConfig = {
+          class: cssClasses,
+          prop: icon.prop,
+          attr: icon.attr
+        };
+        let iconTag = ui.d.createTag("i", tagConfig);
+        m_iconList.push(iconTag);
+        if (icon.position === "left") {
+          m_buttonTag.insertBefore(iconTag, m_buttonTag.firstChild);
+        } else {
+          m_buttonTag.appendChild(iconTag);
+        }
       }
     }
     function getImageTagById(id) {
       return m_imageList.find((img) => img.id === id);
+    }
+    function getIconTagById(id) {
+      return m_iconList.find((icon) => icon.id === id);
     }
     function handleClick(ev) {
       if (m_enable) {
@@ -1179,6 +1322,28 @@ ui.class.Button = class Button extends HTMLElement {
         }
         if (m_props.fnGroupClick) {
           m_props.fnGroupClick({
+            Button: self,
+            ev
+          });
+        }
+      }
+    }
+    function handleMouseDown(ev) {
+      if (m_enable) {
+        m_buttonTag.classList.add(m_props.css.pressed);
+        if (m_props.fnMouseDown) {
+          m_props.fnMouseDown({
+            Button: self,
+            ev
+          });
+        }
+      }
+    }
+    function handleMouseUp(ev) {
+      if (m_enable) {
+        m_buttonTag.classList.remove(m_props.css.pressed);
+        if (m_props.fnMouseUp) {
+          m_props.fnMouseUp({
             Button: self,
             ev
           });
@@ -1256,6 +1421,7 @@ ui.class.Button = class Button extends HTMLElement {
     function configure(customProps = {}) {
       return new Promise((resolve) => {
         m_props = {
+          text: "Mambo Button",
           enable: true,
           preventDefault: true,
           stopPropagation: true,
@@ -1298,7 +1464,9 @@ ui.class.ButtonGroup = class ButtonGroup extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -1410,7 +1578,9 @@ ui.class.ButtonSVG = class ButtonSVG extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -1630,7 +1800,9 @@ ui.class.Calendar = class Calendar extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -2072,6 +2244,7 @@ ui.class.Calendar = class Calendar extends HTMLElement {
           headerButtonGroup: {
             buttons: [
               {
+                text: "",
                 css: {
                   button: "m-prev-button",
                   disabled: "m-calendar-header-button-disabled"
@@ -2089,6 +2262,7 @@ ui.class.Calendar = class Calendar extends HTMLElement {
                 fnDynamicHeaderText: getDepthButtonText
               },
               {
+                text: "",
                 css: {
                   button: "m-next-button",
                   disabled: "m-calendar-header-button-disabled"
@@ -2152,13 +2326,18 @@ ui.class.Checkbox = class Checkbox extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
     function setupDOM() {
       return new Promise((resolve) => {
         m_containerTag = ui.d.createTag({ ...m_props.tags.container, class: m_props.css.container });
+        if (m_props.position === "right") {
+          m_containerTag.classList.add("right");
+        }
         self.classList.add(m_props.css.self);
         self.appendChild(m_containerTag);
         const textTag = ui.d.createTag({
@@ -2176,9 +2355,15 @@ ui.class.Checkbox = class Checkbox extends HTMLElement {
         inputConfig.attr.name = m_props.name;
         m_inputTag = ui.d.createTag(inputConfig);
         m_spanTag = ui.d.createTag({ ...m_props.tags.span, class: m_props.css.span });
-        m_containerTag.appendChild(textTag);
-        m_containerTag.appendChild(m_inputTag);
-        m_containerTag.appendChild(m_spanTag);
+        if (m_props.position === "right") {
+          m_containerTag.appendChild(textTag);
+          m_containerTag.appendChild(m_inputTag);
+          m_containerTag.appendChild(m_spanTag);
+        } else {
+          m_containerTag.appendChild(m_inputTag);
+          m_containerTag.appendChild(m_spanTag);
+          m_containerTag.appendChild(textTag);
+        }
         setEnable();
         resolve();
       });
@@ -2241,7 +2426,8 @@ ui.class.Checkbox = class Checkbox extends HTMLElement {
         enable: true,
         name: Math.random().toString(36).slice(2),
         tag: "default",
-        theme: "default"
+        theme: "default",
+        position: "left"
       };
       m_props = ui.utils.extend(true, m_props, customProps);
       m_parentTag = ui.d.getTag(m_props.parentTag);
@@ -2274,7 +2460,9 @@ ui.class.CheckboxGroup = class CheckboxGroup extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -2298,7 +2486,8 @@ ui.class.CheckboxGroup = class CheckboxGroup extends HTMLElement {
           name: m_props.name,
           parentTag: self,
           fnGroupClick: handleGroupClick,
-          fnComplete: resolve
+          fnComplete: resolve,
+          position: checkbox.position || m_props.position
         };
         m_checkboxList.push(ui.checkbox(checkboxConfig));
       });
@@ -2361,7 +2550,8 @@ ui.class.CheckboxGroup = class CheckboxGroup extends HTMLElement {
           tag: "default",
           theme: "default",
           name: Math.random().toString(36).slice(2),
-          checkboxes: []
+          checkboxes: [],
+          position: "right"
         };
         m_props = ui.utils.extend(true, m_props, customProps);
         m_parentTag = ui.d.getTag(m_props.parentTag);
@@ -2397,7 +2587,9 @@ ui.class.Combobox = class Combobox extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       await setupInput();
       await setupDropdown();
@@ -2451,6 +2643,7 @@ ui.class.Combobox = class Combobox extends HTMLElement {
         m_input.value({ value: text });
         m_previous_text = text;
         m_value = context.Button.getId();
+        m_input.getTag().classList.add("m-selected");
         dropdown.close();
         if (m_props.fnSelect) {
           m_props.fnSelect({
@@ -2491,7 +2684,10 @@ ui.class.Combobox = class Combobox extends HTMLElement {
       m_input.value({ value: value2 });
       const item = ui.string.findInArray(m_comboBoxData, value2, getItemDataText, "equals");
       if (item) {
-        m_buttonGroup.getTag({ id: getItemDataId(item) }).select();
+        const button = m_buttonGroup.getTag({ id: getItemDataId(item) });
+        if (button) {
+          button.select();
+        }
       } else {
         m_previous_text = value2;
         m_value = value2;
@@ -2558,7 +2754,7 @@ ui.class.Combobox = class Combobox extends HTMLElement {
         };
         m_props = ui.utils.extend(true, m_props, customProps);
         m_parentTag = ui.d.getTag(m_props.parentTag);
-        m_comboBoxData = props.data;
+        m_comboBoxData = m_props.data;
         const tags = ui.tags.getTags({ name: m_props.tag, component: "combobox" });
         m_props.tags = ui.utils.extend(true, tags, m_props.tags);
         const css = ui.theme.getTheme({ name: m_props.theme, component: "combobox" });
@@ -2591,7 +2787,9 @@ ui.class.DatePicker = class DatePicker extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -2748,7 +2946,9 @@ ui.class.Dialog = class Dialog extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -2848,7 +3048,9 @@ ui.class.DragDrop = class DragDrop extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -2976,7 +3178,9 @@ ui.class.Draggable = class Draggable extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -3131,7 +3335,9 @@ ui.class.Dropdown = class Dropdown extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -3150,6 +3356,7 @@ ui.class.Dropdown = class Dropdown extends HTMLElement {
         let button = ui.utils.extend(true, {}, m_props.button);
         button.css = ui.utils.extend(true, m_props.css.button, button.css);
         button.parentTag = self;
+        button.text = button.text || "";
         button.fnComplete = resolve;
         button.fnClick = (context) => {
           if (m_props.button?.fnClick) {
@@ -3169,7 +3376,14 @@ ui.class.Dropdown = class Dropdown extends HTMLElement {
       return new Promise((resolve) => {
         m_dropdownContainerTag = ui.d.createTag({ ...m_props.tags.container, class: m_props.css.container });
         self.appendChild(m_dropdownContainerTag);
-        resolve();
+        if (m_props.positionTag) {
+          ui.d.computeTagHeight(m_props.positionTag).then((tagHeight) => {
+            m_dropdownContainerTag.style.top = `${tagHeight}px`;
+            resolve();
+          });
+        } else {
+          resolve();
+        }
       });
     }
     function setupEventHandler() {
@@ -3251,7 +3465,9 @@ ui.class.FileChooser = class FileChooser extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -3379,7 +3595,9 @@ ui.class.Grid = class Grid extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -4034,30 +4252,45 @@ ui.class.Input = class Input extends HTMLElement {
   constructor(props) {
     super();
     const self = this;
+    const m_iconList = [];
+    let m_required;
     let m_parentTag;
     let m_inputTag;
     let m_labelTag;
-    let m_button;
+    let m_clearButton;
+    let m_leftButton;
     let m_props;
     let m_dataChanged;
-    this.clear = clearInput;
+    let m_containerTag;
+    let m_requiredTextTag;
+    let m_iconRequiredTag;
     this.commitDataChange = () => m_dataChanged = null;
+    this.clear = clearInput;
+    this.clearButton = () => m_clearButton;
     this.dataChanged = () => m_dataChanged;
+    this.getIconTagById = getIconTagById;
     this.getTag = () => m_inputTag;
+    this.leftButton = () => m_leftButton;
     this.setup = setup;
+    this.setAttr = setAttribute;
+    this.showRequired = showRequired;
     this.value = value;
     if (props) {
       setup(props);
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
     function setupDOM() {
       return new Promise((resolve) => {
         self.classList.add(m_props.css.self);
+        m_containerTag = ui.d.createTag({ ...m_props.tags.container, class: m_props.css.container });
+        self.appendChild(m_containerTag);
         const tagConfig = {
           ...m_props.tags.input,
           class: m_props.css.input,
@@ -4069,8 +4302,12 @@ ui.class.Input = class Input extends HTMLElement {
           }
         };
         tagConfig.attr.name = m_props.name;
+        tagConfig.attr.id = m_props.name;
         m_inputTag = ui.d.createTag(tagConfig);
-        self.appendChild(m_inputTag);
+        m_containerTag.appendChild(m_inputTag);
+        if (m_props.icon) {
+          insertIcon();
+        }
         if (m_props.hidden) {
           self.style.display = "none";
         } else if (ui.utils.isString(m_props.labelText)) {
@@ -4082,21 +4319,62 @@ ui.class.Input = class Input extends HTMLElement {
             text: m_props.labelText
           };
           m_labelTag = ui.d.createTag(labelTagConfig);
-          self.appendChild(m_labelTag);
+          m_containerTag.appendChild(m_labelTag);
         }
         if (m_props?.validate?.onStart) {
           validate();
         }
+        installLeftButton().then(resolve);
         installClearInput().then(resolve);
+        if (m_props.required) {
+          m_iconRequiredTag = ui.d.createTag({ ...m_props.tags.iconRequired, class: m_props.css.iconRequired });
+          m_iconList.push(m_iconRequiredTag);
+          m_containerTag.appendChild(m_iconRequiredTag);
+          m_requiredTextTag = ui.d.createTag({ ...m_props.tags.textRequired, class: m_props.css.textRequired });
+          if (m_props.requiredText)
+            m_requiredTextTag.innerText = m_props.requiredText;
+          self.appendChild(m_requiredTextTag);
+        }
       });
+    }
+    function setAttribute(context) {
+      for (const attr in context) {
+        if (attr) {
+          m_inputTag.setAttribute(attr, context[attr]);
+        }
+      }
+    }
+    function insertIcon() {
+      if (Array.isArray(m_props.icon)) {
+        m_props.icon.forEach((icon) => {
+          addIcon(icon);
+        });
+      } else {
+        addIcon(m_props.icon);
+      }
+      function addIcon(icon) {
+        const cssClasses = [m_props.css.icon, icon.attr.class, icon.size].filter(Boolean).join(" ");
+        const tagConfig = {
+          class: cssClasses,
+          prop: icon.prop,
+          attr: icon.attr
+        };
+        let iconTag = ui.d.createTag("i", tagConfig);
+        m_iconList.push(iconTag);
+        if (icon.position === "right") {
+          m_containerTag.appendChild(iconTag);
+        } else {
+          m_containerTag.insertBefore(iconTag, m_inputTag);
+        }
+      }
     }
     function installClearInput() {
       return new Promise((resolve) => {
         if (m_props.enableClear) {
           const buttonConfig = {
-            ...m_props.button,
-            css: m_props.css.button,
-            parentTag: self,
+            ...m_props.clearButton,
+            css: m_props.css.clearButton,
+            parentTag: m_containerTag,
             fnComplete: resolve,
             fnClick: (context) => {
               clearInput();
@@ -4109,7 +4387,38 @@ ui.class.Input = class Input extends HTMLElement {
               }
             }
           };
-          ui.button(buttonConfig);
+          m_clearButton = ui.button(buttonConfig);
+        }
+      });
+    }
+    function installLeftButton() {
+      return new Promise((resolve) => {
+        if (m_props.enableLeftButton) {
+          const buttonConfig = {
+            ...m_props.leftButton,
+            css: m_props.css.leftButton,
+            parentTag: m_containerTag,
+            fnComplete: resolve,
+            fnMouseDown: (context) => {
+              if (m_props.fnMouseDown) {
+                m_props.fnMouseDown({
+                  Input: self,
+                  Button: context.Button,
+                  ev: context.ev
+                });
+              }
+            },
+            fnMouseUp: (context) => {
+              if (m_props.fnMouseUp) {
+                m_props.fnMouseUp({
+                  Input: self,
+                  Button: context.Button,
+                  ev: context.ev
+                });
+              }
+            }
+          };
+          m_leftButton = ui.button(buttonConfig);
         }
       });
     }
@@ -4145,7 +4454,7 @@ ui.class.Input = class Input extends HTMLElement {
         m_props.fnKeyup({
           Input: self,
           value: m_inputTag.value,
-          Button: m_button,
+          Button: m_clearButton,
           ev
         });
       }
@@ -4191,6 +4500,18 @@ ui.class.Input = class Input extends HTMLElement {
         m_inputTag.value = context.value;
       }
     }
+    function getIconTagById(id) {
+      return m_iconList.find((icon) => icon.id === id);
+    }
+    function showRequired() {
+      if (m_iconRequiredTag && m_props.required && m_inputTag.value === "") {
+        m_iconRequiredTag.classList.remove("hidden");
+        m_requiredTextTag.classList.remove("hidden");
+      } else {
+        m_iconRequiredTag.classList.add("hidden");
+        m_requiredTextTag.classList.add("hidden");
+      }
+    }
     function setupComplete() {
       if (m_props.fnComplete) {
         m_props.fnComplete({ Input: self });
@@ -4202,7 +4523,10 @@ ui.class.Input = class Input extends HTMLElement {
           tag: "default",
           theme: "default",
           name: Math.random().toString(36).slice(2),
-          button: { text: "" }
+          clearButton: { text: "" },
+          leftButton: { text: "" },
+          icon: [],
+          requiredText: "This is a required field."
         };
         m_props = ui.utils.extend(true, m_props, customProps);
         m_parentTag = ui.d.getTag(m_props.parentTag);
@@ -4234,7 +4558,9 @@ ui.class.Listbox = class Listbox extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -4260,25 +4586,41 @@ ui.class.Listbox = class Listbox extends HTMLElement {
       return new Promise((resolve) => {
         const itemConfig = {
           ...m_props.tags.item,
-          class: m_props.css.item,
-          text: itemData[m_props.displayKey]
+          class: m_props.css.item
         };
         let itemTag = ui.d.createTag(itemConfig);
+        const constructorName = itemData[m_props.displayKey].constructor.name;
+        if (constructorName === "DocumentFragment") {
+          itemTag.appendChild(itemData[m_props.displayKey].firstChild);
+        }
+        if (constructorName === "String") {
+          itemTag.innerHTML = itemData[m_props.displayKey];
+        }
+        if (ui.d.utils.isNode(itemData[m_props.displayKey])) {
+          itemTag.appendChild(itemData[m_props.displayKey]);
+        }
         m_listboxContainerTag.appendChild(itemTag);
         setupItemEventListeners(itemTag, itemData).then(resolve);
       });
     }
     function setupItemEventListeners(item, data) {
       return new Promise((resolve) => {
-        item.addEventListener("click", (ev) => {
-          if (m_props.fnSelect) {
-            m_props.fnSelect({
-              ev,
-              data,
-              item,
-              Listbox: self
-            });
-          }
+        const listeners = [
+          { type: "click", fn: "fnSelect" },
+          { type: "mouseover", fn: "fnHover" },
+          { type: "mouseleave", fn: "fnLeave" }
+        ];
+        listeners.forEach((listener) => {
+          item.addEventListener(listener.type, (ev) => {
+            if (m_props[listener.fn]) {
+              m_props[listener.fn]({
+                ev,
+                data,
+                item,
+                Listbox: self
+              });
+            }
+          });
         });
         resolve();
       });
@@ -4332,7 +4674,12 @@ ui.class.Mapbox = class Mapbox extends HTMLElement {
     let m_containerTag;
     let m_props;
     let m_map;
+    let m_markers = [];
     this.addPoints = addPoints;
+    this.fitBounds = fitBounds;
+    this.getMarker = getMarker;
+    this.getMarkers = getMarkers;
+    this.jumpTo = jumpTo;
     this.setup = setup;
     if (props) {
       setup(props);
@@ -4340,7 +4687,9 @@ ui.class.Mapbox = class Mapbox extends HTMLElement {
     async function setup(props2) {
       checkMapboxLibraries();
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       await renderMap();
       await getUserLocation();
@@ -4375,13 +4724,23 @@ ui.class.Mapbox = class Mapbox extends HTMLElement {
         zoom: m_props.zoom
       });
     }
+    function fitBounds(props2) {
+      let config = {
+        padding: 30,
+        maxZoom: 13
+      };
+      if (props2.config) {
+        config = ui.utils.extend(true, config, props2);
+      }
+      m_map.fitBounds([props2.southwestern, props2.northeastern], config);
+    }
     function geolocationError(e) {
       removeWait();
     }
     function renderMap() {
       return new Promise((resolve) => {
         m_map = new mapboxgl.Map({
-          container: m_props.prop.id,
+          container: m_props.tags.container.attr.id,
           style: m_props.mapStyle,
           zoom: 0.01
         });
@@ -4409,8 +4768,14 @@ ui.class.Mapbox = class Mapbox extends HTMLElement {
     function setMarker(arrCoords, marker) {
       arrCoords.forEach(({ lat, lng }) => {
         let config = marker || m_props.marker;
-        new mapboxgl.Marker(config).setLngLat([lng, lat]).addTo(m_map);
+        m_markers.push(new mapboxgl.Marker(config).setLngLat([lng, lat]).addTo(m_map));
       });
+    }
+    function getMarker(coords) {
+      return m_markers.find((marker) => marker._lngLat.lng === coords.lng && marker._lngLat.lat === coords.lat);
+    }
+    function getMarkers() {
+      return m_markers;
     }
     function onMoveEnd(done) {
       m_map.once("moveend", done);
@@ -4475,7 +4840,9 @@ ui.class.Percentage = class Percentage extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -4586,7 +4953,9 @@ ui.class.Player = class Player extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -4724,13 +5093,18 @@ ui.class.Radio = class Radio extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
     function setupDOM() {
       return new Promise((resolve) => {
         m_labelTag = ui.d.createTag({ ...m_props.tags.container, class: m_props.css.container });
+        if (m_props.position === "right") {
+          m_labelTag.classList.add("right");
+        }
         const textTag = ui.d.createTag({
           ...m_props.tags.text,
           class: m_props.css.text,
@@ -4747,9 +5121,15 @@ ui.class.Radio = class Radio extends HTMLElement {
         tagConfig.attr.name = Math.random().toString(36).slice(2);
         m_inputTag = ui.d.createTag(tagConfig);
         m_spanTag = ui.d.createTag({ ...m_props.tags.span, class: m_props.css.span });
-        m_labelTag.appendChild(textTag);
-        m_labelTag.appendChild(m_inputTag);
-        m_labelTag.appendChild(m_spanTag);
+        if (m_props.position === "right") {
+          m_labelTag.appendChild(textTag);
+          m_labelTag.appendChild(m_inputTag);
+          m_labelTag.appendChild(m_spanTag);
+        } else {
+          m_labelTag.appendChild(m_inputTag);
+          m_labelTag.appendChild(m_spanTag);
+          m_labelTag.appendChild(textTag);
+        }
         m_checked = m_props.prop?.checked;
         setEnable();
         self.classList.add(m_props.css.self);
@@ -4815,7 +5195,8 @@ ui.class.Radio = class Radio extends HTMLElement {
       m_props = {
         tag: "default",
         theme: "default",
-        enable: true
+        enable: true,
+        position: "left"
       };
       m_props = ui.utils.extend(true, m_props, customProps);
       m_parentTag = ui.d.getTag(m_props.parentTag);
@@ -4847,7 +5228,9 @@ ui.class.RadioGroup = class RadioGroup extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -4871,7 +5254,8 @@ ui.class.RadioGroup = class RadioGroup extends HTMLElement {
           name: m_props.name,
           parentTag: self,
           fnGroupClick: handleGroupClick,
-          fnComplete: resolve
+          fnComplete: resolve,
+          position: radio.position || m_props.radio.position || "left"
         };
         m_radioList.push(ui.radio(radioConfig));
       });
@@ -4975,7 +5359,9 @@ ui.class.Rating = class Rating extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -5100,6 +5486,158 @@ ui.class.Rating = class Rating extends HTMLElement {
 };
 ui.rating = (props) => new ui.class.Rating(props);
 customElements.define("mambo-rating", ui.class.Rating);
+ui.class.Search = class Search extends HTMLElement {
+  constructor(props) {
+    super();
+    const self = this;
+    let m_parentTag;
+    let m_inputContainer;
+    let m_input;
+    let m_dropdownWrapperTag;
+    let m_dropdown;
+    let m_listbox;
+    let m_searchButton;
+    let m_props;
+    let m_value = "";
+    this.destroy = destroySearch;
+    this.setup = setup;
+    this.suggest = suggest;
+    if (props) {
+      setup(props);
+    }
+    async function setup(props2) {
+      await configure(props2);
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
+      await setupDOM();
+      await setupInput();
+      await setupButton();
+      await setupDropdown();
+      setupComplete();
+    }
+    async function setupDOM() {
+      return new Promise((resolve) => {
+        m_inputContainer = ui.d.createTag({ ...m_props.tags.inputContainer, class: m_props.css.inputContainer });
+        self.classList.add(m_props.css.self);
+        self.appendChild(m_inputContainer);
+        resolve();
+      });
+    }
+    function setupInput() {
+      return new Promise((resolve) => {
+        let input = ui.utils.extend(true, {}, m_props.input);
+        input.css = ui.utils.extend(true, m_props.css.input, input.css);
+        input.parentTag = m_inputContainer;
+        input.fnClear = (context) => {
+          m_value = "";
+          if (m_dropdown) {
+            m_dropdown.close();
+          }
+        };
+        input.fnKeyup = (context) => {
+          if (m_props.input?.fnKeyup) {
+            m_value = context.value;
+            if (m_value.length >= m_props.firedIn) {
+              m_props.input.fnKeyup(m_value);
+            } else {
+              if (m_dropdown) {
+                m_dropdown.close();
+              }
+            }
+          }
+        };
+        input.fnComplete = resolve;
+        m_input = ui.input(input);
+      });
+    }
+    function setupButton() {
+      return new Promise((resolve) => {
+        let button = ui.utils.extend(true, {}, m_props.button);
+        button.css = ui.utils.extend(true, m_props.css.searchButton, button.css);
+        button.parentTag = self;
+        button.fnComplete = resolve();
+        button.fnClick = (context) => {
+          if (m_props.button?.fnClick && m_value?.length >= m_props.firedIn) {
+            m_props.button.fnClick(m_value);
+          }
+        };
+        m_searchButton = ui.button(button);
+      });
+    }
+    function setupDropdown() {
+      return new Promise((resolve) => {
+        if (m_props.suggest) {
+          m_dropdownWrapperTag = ui.d.createTag({ ...m_props.tags.wrapper, class: m_props.css.wrapper });
+          self.appendChild(m_dropdownWrapperTag);
+          let dropdown = ui.utils.extend(true, {}, m_props.dropdown);
+          dropdown.css = ui.utils.extend(true, m_props.css.dropdown, dropdown.css);
+          dropdown.fnComplete = (context) => {
+            installListbox(context.Dropdown);
+            resolve();
+          };
+          dropdown.disableButton = true;
+          dropdown.positionTag = m_input;
+          dropdown.parentTag = m_dropdownWrapperTag;
+          m_dropdown = ui.dropdown(dropdown);
+        }
+        resolve();
+      });
+    }
+    function installListbox(dropdown) {
+      return new Promise((resolve) => {
+        let listbox = ui.utils.extend(true, {}, m_props.suggest);
+        listbox.css = ui.utils.extend(true, m_props.css.listbox, listbox.css);
+        let contentTag = dropdown.getContentTag();
+        listbox.parentTag = contentTag;
+        listbox.data = [];
+        listbox.fnComplete = resolve();
+        m_listbox = ui.listbox(listbox);
+      });
+    }
+    function suggest(data) {
+      if (m_props.suggest) {
+        m_listbox.replaceList(data);
+        m_dropdown.open();
+      }
+    }
+    function destroySearch() {
+      ui.d.remove(self);
+    }
+    function setupComplete() {
+      if (m_props.fnComplete) {
+        m_props.fnComplete({ Search: self });
+      }
+    }
+    function configure(customProps = {}) {
+      return new Promise((resolve) => {
+        m_props = {
+          firedIn: 1,
+          tag: "default",
+          theme: "default",
+          input: {
+            tags: {
+              input: {
+                prop: {
+                  placeholder: "Search"
+                }
+              }
+            }
+          }
+        };
+        m_props = ui.utils.extend(true, m_props, customProps);
+        m_parentTag = ui.d.getTag(m_props.parentTag);
+        const tags = ui.tags.getTags({ name: m_props.tag, component: "search" });
+        m_props.tags = ui.utils.extend(true, tags, m_props.tags);
+        const css = ui.theme.getTheme({ name: m_props.theme, component: "search" });
+        m_props.css = ui.utils.extend(true, css, m_props.css);
+        resolve();
+      });
+    }
+  }
+};
+ui.search = (props) => new ui.class.Search(props);
+customElements.define("mambo-search", ui.class.Search);
 ui.class.Slideout = class Slideout extends HTMLElement {
   constructor(props) {
     super();
@@ -5121,7 +5659,9 @@ ui.class.Slideout = class Slideout extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -5225,7 +5765,9 @@ ui.class.Slider = class Slider extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       await continueSetupDOM();
       setupComplete();
@@ -5509,7 +6051,9 @@ ui.class.Switch = class Switch extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -5643,7 +6187,9 @@ ui.class.Tab = class Tab extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -5725,6 +6271,357 @@ ui.class.Tab = class Tab extends HTMLElement {
 };
 ui.tab = (options) => new ui.class.Tab(options);
 customElements.define("mambo-tab", ui.class.Tab);
+ui.class.Textarea = class Textarea extends HTMLElement {
+  constructor(props) {
+    super();
+    const self = this;
+    const m_iconList = [];
+    let m_buttonsContainerTag;
+    let m_cancelButton;
+    let m_containerDownTag;
+    let m_containerUpTag;
+    let m_checkButton;
+    let m_dataChanged;
+    let m_editButton;
+    let m_editable;
+    let m_footerTag;
+    let m_iconsContainerTag;
+    let m_iconRequiredTag;
+    let m_labelTag;
+    let m_parentTag;
+    let m_props;
+    let m_required;
+    let m_spanTag;
+    let m_textareaTag;
+    let m_textRequiredTag;
+    this.commitDataChange = () => m_dataChanged = null;
+    this.dataChanged = () => m_dataChanged;
+    this.editable = () => m_editable;
+    this.getIconTagById = getIconTagById;
+    this.getTag = () => m_textareaTag;
+    this.showRequired = showRequired;
+    this.setup = setup;
+    this.value = value;
+    if (props) {
+      setup(props);
+    }
+    async function setup(props2) {
+      await configure(props2);
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
+      await setupDOM();
+      setupComplete();
+    }
+    function setupDOM() {
+      return new Promise((resolve) => {
+        self.classList.add(m_props.css.self);
+        m_containerUpTag = ui.d.createTag({ ...m_props.tags.containerUp, class: m_props.css.containerUp });
+        self.appendChild(m_containerUpTag);
+        m_containerDownTag = ui.d.createTag({ ...m_props.tags.containerDown, class: m_props.css.containerDown });
+        self.appendChild(m_containerDownTag);
+        const tagConfig = {
+          ...m_props.tags.textarea,
+          class: m_props.css.textarea,
+          text: m_props.value,
+          attr: m_props.attr.textarea,
+          event: {
+            blur: handleOnBlur,
+            change: handleOnChange,
+            keyup: handleOnKeyup
+          }
+        };
+        tagConfig.attr.name = m_props.name;
+        m_textareaTag = ui.d.createTag(tagConfig);
+        m_containerUpTag.appendChild(m_textareaTag);
+        if (m_props.hidden) {
+          self.style.display = "none";
+        } else if (ui.utils.isString(m_props.labelText)) {
+          const labelTagConfig = {
+            name: "label",
+            class: m_props.css.label,
+            prop: m_props.prop,
+            attr: { for: m_props.name },
+            text: m_props.labelText
+          };
+          m_labelTag = ui.d.createTag(labelTagConfig);
+          m_containerUpTag.appendChild(m_labelTag);
+        }
+        if (m_props?.validate?.onStart) {
+          validate();
+        }
+        m_spanTag = ui.d.createTag({ ...m_props.tags.span, class: m_props.css.span, event: { click: handleClick } });
+        m_containerUpTag.appendChild(m_spanTag);
+        m_footerTag = ui.d.createTag({ ...m_props.tags.footer, class: m_props.css.footer });
+        m_containerUpTag.appendChild(m_footerTag);
+        m_buttonsContainerTag = ui.d.createTag({ ...m_props.tags.buttonsContainer, class: m_props.css.buttonsContainer });
+        m_footerTag.appendChild(m_buttonsContainerTag);
+        m_iconsContainerTag = ui.d.createTag({ ...m_props.tags.iconsContainer, class: m_props.css.iconsContainer });
+        m_footerTag.appendChild(m_iconsContainerTag);
+        m_iconRequiredTag = ui.d.createTag({ ...m_props.tags.iconRequired, class: m_props.css.iconRequired });
+        m_iconList.push(m_iconRequiredTag);
+        m_footerTag.appendChild(m_iconRequiredTag);
+        m_textRequiredTag = ui.d.createTag({ ...m_props.tags.textRequired, class: m_props.css.textRequired });
+        m_textRequiredTag.innerText = m_props.requiredText;
+        m_containerDownTag.appendChild(m_textRequiredTag);
+        if (m_props.icon) {
+          insertIcon();
+        }
+        if (m_props.editable) {
+          installButtons().then(resolve);
+          enableSpan();
+        }
+        if (m_props.required) {
+          m_required = m_props.required;
+        }
+      });
+    }
+    function installButtons() {
+      return new Promise((resolve) => {
+        installEditButton().then(resolve);
+        installCancelButton().then(resolve);
+        installCheckButton().then(resolve);
+      });
+    }
+    function installCancelButton() {
+      return new Promise((resolve) => {
+        if (m_props.editable) {
+          const buttonConfig = {
+            ...m_props.cancelButton,
+            css: m_props.css.cancelButton,
+            parentTag: m_buttonsContainerTag,
+            fnComplete: resolve,
+            fnClick: (context) => {
+              enableSpan();
+              if (m_props.fnClear) {
+                m_props.fnClear({
+                  Textarea: self,
+                  Button: context.Button,
+                  ev: context.ev
+                });
+              }
+            }
+          };
+          m_cancelButton = ui.button(buttonConfig);
+        }
+      });
+    }
+    function installEditButton() {
+      return new Promise((resolve) => {
+        if (m_props.editable) {
+          const buttonConfig = {
+            ...m_props.editButton,
+            css: m_props.css.editButton,
+            parentTag: m_buttonsContainerTag,
+            fnComplete: resolve,
+            fnClick: (context) => {
+              enableTextarea();
+              if (m_props.fnClick) {
+                m_props.fnClick({
+                  Textarea: self,
+                  Button: context.Button,
+                  ev: context.ev
+                });
+              }
+            }
+          };
+          m_editButton = ui.button(buttonConfig);
+        }
+      });
+    }
+    function installCheckButton() {
+      return new Promise((resolve) => {
+        if (m_props.editable) {
+          const buttonConfig = {
+            ...m_props.checkButton,
+            css: m_props.css.checkButton,
+            parentTag: m_buttonsContainerTag,
+            fnComplete: resolve,
+            fnClick: (context) => {
+              saveTextareaValue();
+              if (m_props.fnClick) {
+                m_props.fnClick({
+                  Textarea: self,
+                  Button: context.Button,
+                  ev: context.ev
+                });
+              }
+            }
+          };
+          m_checkButton = ui.button(buttonConfig);
+        }
+      });
+    }
+    function handleClick(ev) {
+      if (m_props.preventDefault) {
+        ev.preventDefault();
+      }
+      if (m_props.stopPropagation) {
+        ev.stopPropagation();
+      }
+      if (!m_editable)
+        enableTextarea();
+    }
+    function handleOnBlur(ev) {
+      ev.stopPropagation();
+      ev.preventDefault();
+      validate(ev);
+      if (m_props.fnBlur) {
+        m_props.fnBlur({
+          Textarea: self,
+          value: m_textareaTag.value,
+          ev
+        });
+      }
+    }
+    function handleOnChange(ev) {
+      ev.stopPropagation();
+      ev.preventDefault();
+      validate(ev);
+      if (m_props.fnChange) {
+        m_props.fnChange({
+          Textarea: self,
+          value: m_textareaTag.value,
+          ev
+        });
+      }
+    }
+    function handleOnKeyup(ev) {
+      ev.stopPropagation();
+      ev.preventDefault();
+      validate(ev);
+      if (m_props.fnKeyup) {
+        m_props.fnKeyup({
+          Textarea: self,
+          value: m_textareaTag.value,
+          ev
+        });
+      }
+    }
+    function validate(ev) {
+      if (Array.isArray(m_props.validate?.types)) {
+        m_props.validate.types.forEach((validate2) => {
+          const keys = Object.keys(validate2);
+          keys.forEach((key) => {
+            switch (key) {
+              case "minLength":
+                validateMinLength(validate2.minLength, ev);
+                break;
+            }
+          });
+        });
+      }
+    }
+    function validateMinLength(config, ev) {
+      const curLen = m_textareaTag.value.length;
+      if (typeof config.value === "string") {
+        const length = config.len - curLen;
+        if (length > 0) {
+          const padding = config.value.repeat(length);
+          m_dataChanged = true;
+          m_textareaTag.value = config.dir === "right" ? m_textareaTag.value + padding : padding + m_textareaTag.value;
+          if (m_props.fnDataValidationChange) {
+            m_props.fnDataValidationChange({
+              Textarea: self,
+              ev
+            });
+          }
+        }
+      }
+    }
+    function value(context = {}) {
+      if (typeof context.value === "undefined") {
+        return m_textareaTag.value;
+      } else {
+        m_textareaTag.value = context.value;
+      }
+    }
+    function insertIcon() {
+      if (Array.isArray(m_props.icon)) {
+        m_props.icon.forEach((icon) => {
+          addIcon(icon);
+        });
+      } else {
+        addIcon(m_props.icon);
+      }
+      function addIcon(icon) {
+        const cssClasses = [m_props.css.icon, icon.attr.class, icon.size].filter(Boolean).join(" ");
+        const tagConfig = {
+          class: cssClasses,
+          prop: icon.prop,
+          attr: icon.attr
+        };
+        let iconTag = ui.d.createTag("i", tagConfig);
+        m_iconList.push(iconTag);
+        m_iconsContainerTag.appendChild(iconTag);
+      }
+    }
+    function getIconTagById(id) {
+      return m_iconList.find((icon) => icon.id === id);
+    }
+    function enableTextarea() {
+      m_editable = true;
+      m_textareaTag.value = m_spanTag.innerText;
+      m_textareaTag.style.display = "block";
+      m_spanTag.style.display = "none";
+      m_checkButton.style.display = "block";
+      m_editButton.style.display = "none";
+      m_cancelButton.style.display = "block";
+      m_textareaTag.focus();
+    }
+    function saveTextareaValue() {
+      m_spanTag.innerText = m_textareaTag.value;
+      enableSpan();
+    }
+    function enableSpan() {
+      m_editable = false;
+      m_textareaTag.style.display = "none";
+      m_spanTag.style.display = "inline-block";
+      m_spanTag.scrollTop = 0;
+      m_checkButton.style.display = "none";
+      m_editButton.style.display = "block";
+      m_cancelButton.style.display = "none";
+    }
+    function showRequired() {
+      if (m_iconRequiredTag && m_props.required && m_textareaTag.value === "") {
+        m_iconRequiredTag.classList.remove("hidden");
+        m_textRequiredTag.classList.remove("hidden");
+      } else {
+        m_iconRequiredTag.classList.add("hidden");
+        m_textRequiredTag.classList.add("hidden");
+      }
+    }
+    function setupComplete() {
+      if (m_props.fnComplete) {
+        m_props.fnComplete({ Textarea: self });
+      }
+    }
+    function configure(customProps = {}) {
+      return new Promise((resolve) => {
+        m_props = {
+          tag: "default",
+          theme: "default",
+          name: Math.random().toString(36).slice(2),
+          editButton: { text: "" },
+          cancelButton: { text: "" },
+          checkButton: { text: "" },
+          icon: [],
+          requiredText: "This is a required field."
+        };
+        m_props = ui.utils.extend(true, m_props, customProps);
+        m_editable = m_props.editable;
+        m_parentTag = ui.d.getTag(m_props.parentTag);
+        const tags = ui.tags.getTags({ name: m_props.tag, component: "textarea" });
+        m_props.tags = ui.utils.extend(true, tags, m_props.tags);
+        const css = ui.theme.getTheme({ name: m_props.theme, component: "textarea" });
+        m_props.css = ui.utils.extend(true, css, m_props.css);
+        resolve();
+      });
+    }
+  }
+};
+ui.textarea = (props) => new ui.class.Textarea(props);
+customElements.define("mambo-textarea", ui.class.Textarea);
 ui.class.TimePicker = class TimePicker extends HTMLElement {
   constructor(props) {
     super();
@@ -5742,7 +6639,9 @@ ui.class.TimePicker = class TimePicker extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -5855,7 +6754,9 @@ ui.class.TreeView = class TreeView extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -6018,7 +6919,9 @@ var Template = class extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
@@ -6065,7 +6968,9 @@ ui.class.VideoPlayer = class VideoPlayer extends HTMLElement {
     }
     async function setup(props2) {
       await configure(props2);
-      await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      if (!self.isConnected) {
+        await ui.utils.installUIComponent({ self, m_parentTag, m_props });
+      }
       await setupDOM();
       setupComplete();
     }
