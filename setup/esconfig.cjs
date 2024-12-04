@@ -5,7 +5,7 @@ const LIB_NAME = "mambo-tools";
 const LIB_VERSION = version;
 const LIB_FILE_NAME = `${LIB_NAME}-${LIB_VERSION}`;
 const LIB_FILE_NAME_MIN = `${LIB_NAME}-min-${LIB_VERSION}`;
-const SRC_TOOLS = `${config.PUBLIC_DIR}/tools`;
+const SRC_TOOLS = `${config.SRC_DIR}/tools`;
 const CURRENT_YEAR = new Date().getFullYear();
 
 const COPYRIGHT = `/******************************************

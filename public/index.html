@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mambo Tools" />
+    <base href="/" />
+    <title>Mambo Tools Storyboard</title>
+    <link rel="icon" href="img/mambo/mambo-m.ico" />
+    <!-- Fonts -->
+    <link rel="stylesheet" href="fonts/fonts.css" />
+    <link rel="stylesheet" href="fonts/awesome/all.css" />
+    <!-- Load all Styles -->
+    <link rel="stylesheet" href="css/dark.css" />
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/mambo-ui-0.0.2.css" />
+    <link rel="stylesheet" href="css/storyboard.css" />
+    <link rel="stylesheet" href="css/prettify.css" />
+    <!-- Load JavaScripts Dependencies -->
+    <script src="js/domjs-0.0.1.js"></script>
+    <script src="js/mambo-ui-0.0.2.js"></script>
+    <script src="js/marked.min.js"></script>
+    <script src="js/run_prettify.js"></script>
+    <!-- Load Initializer JavaScript -->
+    <script src="js/init.js"></script>
+    <!-- Load Storyboard JavaScripts -->
+    <script src="js/storyboard.js"></script>
+  </head>
+  <body>
+    <tools-storyboard>
+      <card-content>
+        <card-header>
+          <mambo-button id="homeButton"></mambo-button>
+        </card-header>
+        <card-body>
+          <storyboard-treeview></storyboard-treeview>
+          <storyboard-component>
+            <story-tab></story-tab>
+          </storyboard-component>
+        </card-body>
+      </card-content>
+    </tools-storyboard>
+    <mambo-tab-img>
+      <img class="middle" src="img/mambo/mambo-tab/middle.jpg" alt="Mambo Tab" />
+      <img class="left" src="img/mambo/mambo-tab/left.jpg" alt="Mambo Tab" />
+      <img class="right" src="img/mambo/mambo-tab/right.jpg" alt="Mambo Tab" />
+    </mambo-tab-img>
+    <!-- Load App JavaScript -->
+    <script src="js/index.js"></script>
+  </body>
+</html>
