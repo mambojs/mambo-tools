@@ -12,13 +12,16 @@ function installStoryboard() {
 		setRoutes();
 		installComponentTreeView();
 		setupHomeButton();
-		loadDocumentation().then();
+		loadDocumentation().then()
+			.catch((error) => {
+				console.error("Failed to load documentation:", error);
+			});
 	}
 
 	function configureStoriesData() {
 		// Use alpha characters and spaces only, any other char will break
 		stories = [
-			{ text: "APIManager", fn: "apiManager" },
+			{ text: "APIManager", fn: "ApiManager" },
 			{ text: "DateManager", fn: "dateManager" },
 			{ text: "EventManager", fn: "eventManager" },
 			{ text: "HistoryManager", fn: "historyManager" },
@@ -75,7 +78,6 @@ function installStoryboard() {
 	}
 
 	function installComponentTreeView() {
-
 		const treeViewConfig = {
 			parentTag: "storyboard-treeview",
 			data: [
@@ -130,7 +132,7 @@ function installStoryboard() {
 					},
 					{
 						text: "Documentation",
-						area: "tab-description",
+						area: "tab-documentation",
 						class: { class: "documentation-container" },
 						fnClick: (context) => {
 							// You can declare individual event handlers for tab clicks
@@ -146,13 +148,11 @@ function installStoryboard() {
 				contentTag.appendChild(content);
 
 				switch (tab.area) {
-					case "tab-description": {
-						const desc = await getDescription(props.text);
-						dom.append(content, desc);
+					case "tab-documentation":
+						outputDocumentation(props.text);
 						break;
-					}
 					case "tab-code":
-						await outputCode(storyFnContent, content);
+						outputCode(storyFnContent, content);
 						break;
 					case "tab-demo":
 						storyFn(props);
@@ -164,15 +164,12 @@ function installStoryboard() {
 		ui.tab(tabConfig);
 	}
 
-	async function getDescription(story) {
-		await outputDocumentation(story);
-	}
-
 	async function loadDocumentation() {
-		const file = await fetch("getDocumentation").then((resp) => resp.text());
-		const descriptionElement = dom.createTag("description-element");
-		descriptionElement.innerHTML = addIdsToHeadings(marked.parse(file));
-		storyParentTag.appendChild(descriptionElement);
+		const file = await fetch("getFile?type=documentation");
+		const text = await file.text();
+		const documentationElement = dom.createTag("documentation-element");
+		documentationElement.innerHTML = addIdsToHeadings(marked.parse(text));
+		storyParentTag.appendChild(documentationElement);
 	}
 
 	function slugify(text) {
@@ -214,12 +211,14 @@ function installStoryboard() {
 			text: "Home",
 			fnClick: () => {
 				storyParentTag.innerHTML = null;
-				loadDocumentation();
+				loadDocumentation().then().catch((error) => {
+					console.error("Failed to load documentation:", error);
+				});
 			},
 		});
 	}
 
-	async function outputCode(code, parentTag) {
+	function outputCode(code, parentTag) {
 		const codeElement = dom.createTag("pre", { class: "prettyprint lang-basic", text: code });
 		parentTag.appendChild(codeElement);
 		PR.prettyPrint();
@@ -227,7 +226,7 @@ function installStoryboard() {
 
 	function outputDocumentation(storyName) {
 		const sectionId = slugify(storyName);
-		const documentationContainer = dom.getTag("tab-description");
+		const documentationContainer = dom.getTag("tab-documentation");
 		if (documentations[sectionId]) {
 			documentationContainer.innerHTML = documentations[sectionId];
 		}

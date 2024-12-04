@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
 
 // Serves resources from public folder
 config.PUBLIC_DIRS.forEach((dir) => {
-	app.use(`/${dir}`, express.static(dir));
+	app.use(express.static(path.join(__dirname, `${dir}`)));
 });
 
 // Return system configuration
@@ -26,22 +26,24 @@ app.get("/getSystemConfig", (req, res) => {
 	res.send(config.system);
 });
 
-// Fetch a file
 app.get("/getFile", (req, res) => {
-	const myPath = path.join(`${__dirname}${separator}${req.query.path}`);
-	fs.readFile(myPath, "utf8", (err, file) => {
-		if (err) return res.send(err);
-		res.send(file);
-	});
-});
-
-app.get("/getDocumentation", (req, res) => {
 	const s = separator;
-	const filePath = "documentation/documentation.md";
-	const myPath = path.join(`${__dirname}${s}${filePath}`);
+	const { type, name, path } = req.query;
+
+	const normalizedName = name ? name.replaceAll(" ", "") : "";
+	const formattedName = normalizedName ? `${normalizedName[0].toLowerCase()}${normalizedName.slice(1)}` : "";
+
+	const basePaths = {
+		default: `${__dirname}${s}${path}`,
+		script: `${__dirname}${s}src${s}tools${s}${s}${normalizedName}${s}${formattedName}.js`,
+		story: `${__dirname}${s}src${s}tools${s}${s}${normalizedName}${s}storyboard${s}${formattedName}.js`,
+		documentation: `${__dirname}${s}documentation${s}documentation.md`,
+	};
+
+	const myPath = basePaths[type] || basePaths.default;
 
 	fs.readFile(myPath, "utf8", (err, file) => {
-		if (err) return res.send(err);
+		if (err) return res.status(500).send({ error: "File not found or cannot be read." });
 		res.send(file);
 	});
 });
