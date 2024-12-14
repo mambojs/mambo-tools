@@ -12,7 +12,8 @@ function installStoryboard() {
 		setRoutes();
 		installComponentTreeView();
 		setupHomeButton();
-		loadDocumentation().then()
+		loadDocumentation()
+			.then()
 			.catch((error) => {
 				console.error("Failed to load documentation:", error);
 			});
@@ -21,7 +22,7 @@ function installStoryboard() {
 	function configureStoriesData() {
 		// Use alpha characters and spaces only, any other char will break
 		stories = [
-			{ text: "APIManager", fn: "ApiManager" },
+			{ text: "APIManager", fn: "apiManager" },
 			{ text: "DateManager", fn: "dateManager" },
 			{ text: "EventManager", fn: "eventManager" },
 			{ text: "HistoryManager", fn: "historyManager" },
@@ -39,31 +40,28 @@ function installStoryboard() {
 	}
 
 	function setRoutes() {
-
 		let routes = [
 			{
 				name: "Home",
 				path: "/",
-				action: () => showPageContent("Home")
+				action: () => showPageContent("Home"),
 			},
 			{
 				name: "404",
 				path: "/404",
 				notfound: true,
 				action: () => showPageContent("Not Found"),
-			}
+			},
 		];
 
-		stories.forEach(story => {
-			routes.push(
-				{
-					name: story.text,
-					path: `/${story.fn.toLowerCase()}`,
-					action: () => {
-						loadComponent(story);
-					}
-				}
-			);
+		stories.forEach((story) => {
+			routes.push({
+				name: story.text,
+				path: `/${story.fn.toLowerCase()}`,
+				action: () => {
+					loadComponent(story);
+				},
+			});
 		});
 
 		router.routes({ historyManager: object.get("history"), routes: routes });
@@ -128,7 +126,7 @@ function installStoryboard() {
 					{
 						text: "Code",
 						area: "tab-code",
-						class: {class: "code-container"}
+						class: { class: "code-container" },
 					},
 					{
 						text: "Documentation",
@@ -157,8 +155,8 @@ function installStoryboard() {
 					case "tab-demo":
 						storyFn(props);
 						break;
-				}},
-
+				}
+			},
 		};
 
 		ui.tab(tabConfig);
@@ -211,9 +209,11 @@ function installStoryboard() {
 			text: "Home",
 			fnClick: () => {
 				storyParentTag.innerHTML = null;
-				loadDocumentation().then().catch((error) => {
-					console.error("Failed to load documentation:", error);
-				});
+				loadDocumentation()
+					.then()
+					.catch((error) => {
+						console.error("Failed to load documentation:", error);
+					});
 			},
 		});
 	}
