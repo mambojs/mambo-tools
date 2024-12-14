@@ -9,6 +9,7 @@ const currentFileName = path.join(documentationDir, "documentation.md");
 const archivedFileName = path.join(archivedDir, `documentation-${version}.md`);
 const buildFileName = path.join(buildDir, "documentation.md");
 const CURRENT_YEAR = new Date().getFullYear();
+
 const COPYRIGHT_AND_TITLE = `<!--
 ******************************************
 *  Copyright ${CURRENT_YEAR} Alejandro Sebastian Scotti, Scotti Corp.
