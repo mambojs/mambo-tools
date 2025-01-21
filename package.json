@@ -4,17 +4,21 @@
 	"author": "Alejandro Scotti, Scotti Corp",
 	"license": "Apache 2.0",
 	"description": "Mambo Tools library",
-	"main": "server.cjs",
+	"main": "server-dev.cjs",
 	"type": "module",
 	"scripts": {
 		"validate": "npm-run-all --parallel eslint hlint clint",
-		"start": "node server.cjs",
+		"dev": "node server-dev.cjs",
+		"start": "node server-prod.cjs",
 		"eslint": "npx eslint \"./**/*.js\"",
 		"hlint": "npx htmlhint \"./**/*.html\" -i .htmlhintignore",
 		"clint": "npx stylelint \"./**/*.css\"",
 		"precommit": "npm run validate",
 		"prepush": "npm run validate",
-		"build": "node ./setup/esbuild.cjs buildLib"
+		"build": "node ./setup/esbuild.cjs buildLib",
+		"build-documentation": "npm run build && node ./setup/build_documentation.cjs",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"express": "^4.17.1",
@@ -23,10 +27,12 @@
 		"stylelint-prettier": "^2.0.0"
 	},
 	"devDependencies": {
-		"@babel/eslint-parser": "^7.5.4",
-		"babel-eslint": "^10.1.0",
+		"@babel/eslint-parser": "^7.25.9",
+		"@eslint/eslintrc": "^3.2.0",
+		"@eslint/js": "^9.16.0",
 		"esbuild": "^0.14.32",
-		"eslint": "^8.19.0",
+		"eslint": "^9.16.0",
+		"globals": "^15.13.0",
 		"htmlhint": "^1.1.4",
 		"husky": "^8.0.1",
 		"npm-run-all": "^4.1.5",

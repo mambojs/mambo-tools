@@ -37,27 +37,27 @@ async function apiManager() {
 			"deleteReq": [],
 			"get": [],
 			"getJSON": [
-				{ text: "JSON", checked: true, value: null },
-				{ text: "String", checked: false, value: "string" },
-				{ text: "Pretty", checked: false, value: "pretty" },
+				{ text: "JSON", checked: true, value: null, position: "left" },
+				{ text: "String", checked: false, value: "string", position: "left" },
+				{ text: "Pretty", checked: false, value: "pretty", position: "left" },
 			],
 			"getFile": [
-				{ text: "Show Image", checked: true, value: "show" },
-				{ text: "Download", checked: false, value: "download" },
+				{ text: "Show Image", checked: true, value: "show", position: "left" },
+				{ text: "Download", checked: false, value: "download", position: "left" },
 			],
 			"getFileContent": [],
 			"getXML": [
-				{ text: "Text", checked: true, value: "text" },
-				{ text: "String", checked: false, value: "string" },
-				{ text: "XMLDocument", checked: false, value: "xml" },
+				{ text: "Text", checked: true, value: "text", position: "left" },
+				{ text: "String", checked: false, value: "string", position: "left" },
+				{ text: "XMLDocument", checked: false, value: "xml", position: "left" },
 			],
 			"head": [],
 			"patch": [],
 			"post": [],
 			"postJSON": [
-				{ text: "JSON", checked: true, value: null },
-				{ text: "String", checked: false, value: "string" },
-				{ text: "Pretty", checked: false, value: "pretty" },
+				{ text: "JSON", checked: true, value: null, position: "left" },
+				{ text: "String", checked: false, value: "string", position: "left" },
+				{ text: "Pretty", checked: false, value: "pretty", position: "left" },
 			],
 			"put": [],
 		};
@@ -85,9 +85,9 @@ async function apiManager() {
 				ui.radioGroup({
 					parentTag: container,
 					radios: [
-						{ text: "API Cache disabled", checked: true, value: undefined },
-						{ text: "Cache On", checked: false, value: true },
-						{ text: "Cache Off", checked: false, value: 'false' },
+						{ text: "API Cache disabled", checked: true, value: undefined, position: "left" },
+						{ text: "Cache On", checked: false, value: true, position: "left" },
+						{ text: "Cache Off", checked: false, value: 'false', position: "left" },
 					],
 					fnClick: (context) => {
 						const selected = context.Radio.value();
