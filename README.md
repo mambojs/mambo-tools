@@ -1,3 +1,5 @@
+> **El desarrollo activo de este package se realiza en el monorepo [eventmap-city/eventmap](https://github.com/eventmap-city/eventmap), bajo `packages/mambo-tools`.**
+
 # Mambo Tools Development Web App
 ### Installation
 1. Clone Repository
